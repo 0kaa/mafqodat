@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "GESS2";
+  src: url("./fonts/GESSTwoBold.otf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "GESS2";
+  src: url("./fonts/GESSTwoLight.otf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "GESS2";
+  src: url("./fonts/GESSTwoMedium.otf");
+  font-weight: 500;
+}
+
+body .v-application{
+  font-family: "GESS2" !important;
+  font-weight: 300;
+}
