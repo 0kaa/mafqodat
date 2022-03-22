@@ -2,9 +2,9 @@
   <div class="d-flex justify-space-between">
     <div class="auth-text d-flex flex-column flex-grow-1">
       <div class="d-flex justify-space-between">
-        <div>
+        <nuxt-link :to="localePath('home')">
           <img src="/logo.png" alt="Logo">
-        </div>
+        </nuxt-link>
         <div>
           <img src="/Saudi_Vision.png" alt="Saudi Vision">
         </div>
@@ -38,15 +38,18 @@
                 v-model="login.password"
                 :label="$t('password')"
                 :type="showPassword ? 'text' : 'password'"
-                class="mb-2"
                 outlined
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                 :rules="rules().password"
                 required
                 color="black"
                 @click:append="showPassword = !showPassword"
               />
+              <nuxt-link :to="localePath('forget-password')" class="text-link">
+                {{ $t('sendCodeAgain') }}
+              </nuxt-link>
             </v-card-text>
+
             <v-card-actions class="justify-center">
               <v-btn
                 type="submit"
@@ -112,7 +115,7 @@ export default {
           await this.$auth.loginWith('local', {
             data: this.login
           })
-          this.$router.push('/')
+          this.$router.push(this.localePath('home'))
           this.$refs.form.reset()
         }
       } catch (err) {

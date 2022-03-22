@@ -10,19 +10,20 @@
         </div>
       </div>
       <h1 class="text-center login-title font-weight-light">
-        {{ $t('forgetPasswordTitle') }}
+        <span v-if="step === 1">{{ $t('forgetPasswordTitle') }}</span>
+        <span v-if="step === 2">{{ $t('otpTitle') }}</span>
+        <span v-if="step === 3">{{ $t('setNewPassword') }}</span>
       </h1>
       <div class="login-form">
-        <v-card max-width="700" class="mx-auto" color="transparent" elevation="0">
+        <v-card v-if="step === 1" max-width="700" class="mx-auto" color="transparent" elevation="0">
           <v-form
-            v-if="step === 1"
             ref="forgetPassword"
             v-model="valid"
             lazy-validation
             autocomplete="off"
             @submit.prevent="forgetPassword()"
           >
-            <v-card-text v-if="step == 1">
+            <v-card-text>
               <v-text-field
                 v-model="email"
                 :label="$t('forgetPasswordLabel')"
@@ -35,20 +36,113 @@
                 color="black"
               />
             </v-card-text>
+            <v-overlay absolute :value="loading">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              />
+            </v-overlay>
             <v-card-actions class="justify-center">
               <v-btn
                 type="submit"
                 color="primary"
                 :disabled="!valid"
                 elevation="1"
-                class="px-14 py-6 font-weight-light login-btn"
+                class="font-weight-light login-btn"
               >
                 {{ $t('resetPassword') }}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
-        <v-snackbar v-model="snackbar" :timeout="8000" :color="snackbarColor">
+        <v-card
+          v-if="step === 2"
+          max-width="400"
+          class="mx-auto relative"
+          color="transparent"
+          elevation="0"
+          dir="ltr"
+        >
+          <v-otp-input
+            v-model="otp"
+            length="4"
+            :disabled="loading"
+          />
+          <v-overlay absolute :value="loading">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            />
+          </v-overlay>
+          <v-card-actions class="justify-center flex-column items-center mt-5">
+            <v-btn
+              type="submit"
+              color="primary"
+              elevation="1"
+              class="font-weight-light login-btn"
+              @click="verifyOtp"
+            >
+              {{ $t('done') }}
+            </v-btn>
+            <button class="mt-6 text-link" @click="sendCodeAgain">
+              {{ $t('sendCodeAgain') }}
+            </button>
+          </v-card-actions>
+        </v-card>
+        <v-card v-if="step === 3" max-width="700" class="mx-auto" color="transparent" elevation="0">
+          <v-form
+            ref="forgetPassword"
+            v-model="valid"
+            lazy-validation
+            autocomplete="off"
+            @submit.prevent="setNewPassword()"
+          >
+            <v-card-text>
+              <v-text-field
+                v-model="newPassword"
+                :label="$t('setNewPassword')"
+                :type="showNewPassword ? 'text' : 'password'"
+                class="mb-2"
+                outlined
+                :append-icon="showNewPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                :rules="passwordRules().newPassword"
+                required
+                color="black"
+                @click:append="showNewPassword = !showNewPassword"
+              />
+              <v-text-field
+                v-model="password_confirmation"
+                :label="$t('confirmPassword')"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                class="mb-2"
+                outlined
+                :append-icon="showConfirmPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                :rules="passwordRules().confirmPassword"
+                required
+                color="black"
+                @click:append="showConfirmPassword = !showConfirmPassword"
+              />
+            </v-card-text>
+            <v-overlay absolute :value="loading">
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              />
+            </v-overlay>
+            <v-card-actions class="justify-center">
+              <v-btn
+                type="submit"
+                color="primary"
+                :disabled="!valid"
+                elevation="1"
+                class="font-weight-light login-btn"
+              >
+                {{ $t('save') }}
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+        <v-snackbar v-model="snackbar" :timeout="5000" :color="snackbarColor">
           {{ snackbarText }}
           <template #action="{ attrs }">
             <v-btn
@@ -77,45 +171,120 @@
 
 <script>
 export default {
+  name: 'ForgotPassword',
   layout: 'auth',
   middleware: 'auth',
   auth: 'guest',
   data: () => ({
     step: 1,
+    loading: false,
     valid: false,
+    passwordValid: false,
     snackbar: false,
-    showPassword: false,
     snackbarText: '',
     snackbarColor: 'red',
-    email: ''
+    email: 'mahmoud@gmail.com',
+    newPassword: '',
+    showNewPassword: false,
+    password_confirmation: '',
+    showConfirmPassword: false,
+    otp: ''
   }),
   mounted () {
     this.$refs.forgetPassword.resetValidation()
   },
   methods: {
     async forgetPassword () {
+      this.loading = true
       try {
         if (this.$refs.forgetPassword.validate()) {
           const response = await this.$api.auth.forgetPassword({ email: this.email })
           this.snackbar = true
+          this.loading = false
           this.snackbarText = response.data.message
           this.snackbarColor = 'green'
-          this.$refs.forgetPassword.reset()
           this.step = 2
         }
       } catch (err) {
         this.snackbar = true
+        this.loading = false
         this.snackbarText = err.response.data.message
         this.snackbarColor = 'red'
       }
 
       // await this.$auth.loginWith('local', { data: this.login })
     },
+    async verifyOtp () {
+      try {
+        this.loading = true
+        this.snackbar = false
+        const response = await this.$api.auth.verifyOtp({ code: this.otp, email: this.email })
+        this.$auth.strategy.token.set(response.data.data.token)
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = response.data.message
+        this.snackbarColor = 'green'
+        this.step = 3
+      } catch (error) {
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = error.response.data.message
+        this.snackbarColor = 'red'
+      }
+    },
+    async sendCodeAgain () {
+      try {
+        this.loading = true
+        this.snackbar = false
+        const response = await this.$api.auth.forgetPassword({ email: this.email })
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = response.data.message
+        this.snackbarColor = 'green'
+      } catch (error) {
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = error.response.data.message
+        this.snackbarColor = 'red'
+      }
+    },
+    async setNewPassword () {
+      try {
+        this.loading = true
+        this.snackbar = false
+        const response = await this.$api.auth.setNewPassword({
+          password: this.newPassword,
+          password_confirmation: this.password_confirmation
+        })
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = response.data.message
+        this.snackbarColor = 'green'
+        // this.$router.push('/login')
+      } catch (error) {
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = error.response.data.message
+        this.snackbarColor = 'red'
+      }
+    },
     rules () {
       return [
         v => !!v || this.$t('emailRequired'),
         v => /.+@.+\..+/.test(v) || this.$t('emailValid')
       ]
+    },
+    passwordRules () {
+      return {
+        newPassword: [
+          v => !!v || this.$t('passwordRequired'),
+          v => v.length >= 6 || this.$t('passwordMinLength')
+        ],
+        confirmPassword: [
+          v => !!v || this.$t('passwordRequired'),
+          v => v === this.newPassword || this.$t('passwordMatch')
+        ]
+      }
     }
   }
 }
@@ -160,6 +329,8 @@ export default {
     font-size:16px;
     letter-spacing: 0;
     border-radius: 8px;
+    min-width: 240px;
+    padding:24px;
   }
     .wave {
       background: url('/wave.png') no-repeat;

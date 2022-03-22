@@ -8,8 +8,17 @@ export default {
   emailValid: 'يجب ان يكون البريد الاكتروني صحيح',
   passwordRequired: 'كلمة المرور مطلوبة',
   passwordMinLength: 'لابد ان يكون كلمة المرور اكثر من 6 ارقام',
+  passwordMatch: 'كلمة المرور غير متطابقة',
   close: 'إغلاق',
   forgetPasswordTitle: 'كتابة البريد الالكتروني',
   forgetPasswordLabel: 'ادخل البريد الاكتروني',
-  resetPassword: 'إعادة تعين كلمة المرور'
+  resetPassword: 'إعادة تعين كلمة المرور',
+  otpTitle: 'كتابة كود التحقق',
+  done: 'تم',
+  otpRequired: 'كود التحقق مطلوب',
+  otpValid: 'يجب ان يكون كود التحقق صحيح',
+  sendCodeAgain: 'اعادة ارسال الكود',
+  setNewPassword: 'تعيين كلمة مرور جديدة',
+  confirmPassword: 'إعادة كتابة كلمة المرور',
+  save: 'حفظ'
 }

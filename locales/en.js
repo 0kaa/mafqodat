@@ -6,9 +6,19 @@ export default {
   password: 'Password',
   emailRequired: 'Email is required',
   emailValid: 'Email must be valid',
+  passwordRequired: 'Password is required',
   passwordMinLength: 'The password must be at least 6 characters long',
+  passwordMatch: 'Passwords do not match',
   close: 'Close',
   forgetPasswordTitle: 'Forget Password',
   forgetPasswordLabel: 'Enter your email',
-  resetPassword: 'Reset Password'
+  resetPassword: 'Reset Password',
+  otpTitle: 'Enter OTP',
+  done: 'Done',
+  otpRequired: 'OTP is required',
+  otpValid: 'OTP must be valid',
+  sendCodeAgain: 'Send code again',
+  setNewPassword: 'Set a new password',
+  confirmPassword: 'Confirm password',
+  save: 'Save'
 }
