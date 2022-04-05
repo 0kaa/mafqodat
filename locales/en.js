@@ -12,6 +12,7 @@ export default {
   close: 'Close',
   forgetPasswordTitle: 'Forget Password',
   forgetPasswordLabel: 'Enter your email',
+  forgetPassword: 'Forget Password ?',
   resetPassword: 'Reset Password',
   otpTitle: 'Enter OTP',
   done: 'Done',

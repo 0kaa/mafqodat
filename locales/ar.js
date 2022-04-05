@@ -12,6 +12,7 @@ export default {
   close: 'إغلاق',
   forgetPasswordTitle: 'كتابة البريد الالكتروني',
   forgetPasswordLabel: 'ادخل البريد الاكتروني',
+  forgetPassword: 'هل نسيت كلمة المرور ؟',
   resetPassword: 'إعادة تعين كلمة المرور',
   otpTitle: 'كتابة كود التحقق',
   done: 'تم',

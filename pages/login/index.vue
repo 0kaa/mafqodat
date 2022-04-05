@@ -2,7 +2,7 @@
   <div class="d-flex justify-space-between">
     <div class="auth-text d-flex flex-column flex-grow-1">
       <div class="d-flex justify-space-between">
-        <nuxt-link :to="localePath('home')">
+        <nuxt-link :to="localePath('/')">
           <img src="/logo.png" alt="Logo">
         </nuxt-link>
         <div>
@@ -46,7 +46,7 @@
                 @click:append="showPassword = !showPassword"
               />
               <nuxt-link :to="localePath('forget-password')" class="text-link">
-                {{ $t('sendCodeAgain') }}
+                {{ $t('forgetPassword') }}
               </nuxt-link>
             </v-card-text>
 
@@ -93,8 +93,7 @@
 <script>
 export default {
   layout: 'auth',
-  middleware: 'auth',
-  auth: 'guest',
+  auth: false,
   data: () => ({
     valid: false,
     snackbar: false,

@@ -38,7 +38,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/api.js' },
-    { src: '~/plugins/axios.js' }
+    { src: '~/plugins/axios.js' },
+    { src: '~/plugins/i18n.js' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -130,6 +131,10 @@ export default {
         }
       }
     }
+  },
+
+  router: {
+    middleware: ['auth']
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

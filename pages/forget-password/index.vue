@@ -2,9 +2,9 @@
   <div class="d-flex justify-space-between">
     <div class="auth-text d-flex flex-column flex-grow-1">
       <div class="d-flex justify-space-between">
-        <div>
+        <nuxt-link :to="localePath('/')">
           <img src="/logo.png" alt="Logo">
-        </div>
+        </nuxt-link>
         <div>
           <img src="/Saudi_Vision.png" alt="Saudi Vision">
         </div>
@@ -61,7 +61,6 @@
           class="mx-auto relative"
           color="transparent"
           elevation="0"
-          dir="ltr"
         >
           <v-otp-input
             v-model="otp"
@@ -173,8 +172,7 @@
 export default {
   name: 'ForgotPassword',
   layout: 'auth',
-  middleware: 'auth',
-  auth: 'guest',
+  auth: false,
   data: () => ({
     step: 1,
     loading: false,
@@ -183,7 +181,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
-    email: 'mahmoud@gmail.com',
+    email: '',
     newPassword: '',
     showNewPassword: false,
     password_confirmation: '',
@@ -260,7 +258,13 @@ export default {
         this.snackbar = true
         this.snackbarText = response.data.message
         this.snackbarColor = 'green'
-        // this.$router.push('/login')
+        await this.$auth.loginWith('local', {
+          data: {
+            email: this.email,
+            password: this.newPassword
+          }
+        })
+        this.$router.push(this.localePath('home'))
       } catch (error) {
         this.loading = false
         this.snackbar = true
