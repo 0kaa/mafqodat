@@ -21,5 +21,7 @@ export default {
   sendCodeAgain: 'اعادة ارسال الكود',
   setNewPassword: 'تعيين كلمة مرور جديدة',
   confirmPassword: 'إعادة كتابة كلمة المرور',
-  save: 'حفظ'
+  save: 'حفظ',
+  profile: 'الملف الشخصى',
+  logout: 'تسجيل الخروج'
 }

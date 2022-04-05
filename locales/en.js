@@ -21,5 +21,7 @@ export default {
   sendCodeAgain: 'Send code again',
   setNewPassword: 'Set a new password',
   confirmPassword: 'Confirm password',
-  save: 'Save'
+  save: 'Save',
+  profile: 'Profile',
+  logout: 'Logout'
 }

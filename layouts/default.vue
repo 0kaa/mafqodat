@@ -36,22 +36,108 @@
           v-for="(locale,i) in availableLocales"
           :key="i"
           color="primary"
-          icon
+          fab
+          small
           outlined
           :to="switchLocalePath(locale.code)"
         >
           {{ locale.code }}
         </v-btn>
-        <v-btn
-          v-for="(locale,i) in availableLocales"
-          :key="i"
-          color="primary"
-          icon
-          outlined
-          :to="switchLocalePath(locale.code)"
-        />
+
+        <v-menu
+          rounded
+          offset-y
+          min-width="200"
+          bottom
+          transition="slide-y-transition"
+        >
+          <template #activator="{ attrs, on }">
+            <v-btn
+              fab
+              small
+              v-bind="attrs"
+              class="overflow-hidden"
+              outlined
+              color="primary"
+              v-on="on"
+            >
+              <v-img
+                v-if="$auth.user.image"
+                :src="$auth.user.image"
+                alt="user profile"
+                class="user-profile"
+              />
+              <v-img
+                v-else
+                class="d-flex align-center text-center"
+
+                src="/arab.png"
+              />
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item link :to="localePath('/profile')">
+              <v-list-item-title v-text="$t('profile')" />
+              <v-list-tile-avatar>
+                <svg
+                  id="_392531_account_friend_human_man_member_icon"
+                  data-name="392531_account_friend_human_man_member_icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18.581"
+                  height="17.917"
+                  viewBox="0 0 18.581 17.917"
+                >
+                  <path id="Path_16" data-name="Path 16" d="M15.237,11.847a5.32,5.32,0,1,0-1.137.958,7.949,7.949,0,0,1,5.127,6.785H3.355a7.967,7.967,0,0,1,2.706-5.343.664.664,0,0,0-.872-1A9.291,9.291,0,0,0,2,20.254a.663.663,0,0,0,.664.664H19.917a.663.663,0,0,0,.664-.664A9.274,9.274,0,0,0,15.237,11.847ZM7.309,8.309a3.982,3.982,0,1,1,3.982,3.982A3.986,3.986,0,0,1,7.309,8.309Z" transform="translate(-2 -3)" fill="#f6931e" />
+                </svg>
+              </v-list-tile-avatar>
+            </v-list-item>
+            <v-list-item link @click.prevent="logout()">
+              <v-list-item-title v-text="$t('logout')" />
+              <v-list-tile-avatar>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20.664" height="17.387" viewBox="0 0 20.664 17.387">
+                  <g id="log-out-outline" transform="translate(0.5 0.5)">
+                    <path
+                      id="Path_19"
+                      data-name="Path 19"
+                      d="M4.5,19.04v2.049a2.049,2.049,0,0,0,2.049,2.049h8.193a2.049,2.049,0,0,0,2.049-2.049V8.8A2.049,2.049,0,0,0,14.742,6.75H6.958A2.439,2.439,0,0,0,4.5,8.8v2.049"
+                      transform="translate(2.873 -6.75)"
+                      fill="none"
+                      stroke="#f6931e"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    />
+                    <path
+                      id="Path_20"
+                      data-name="Path 20"
+                      d="M29.972,20.568l-4.1-4.1,4.1-4.1"
+                      transform="translate(-25.875 -8.278)"
+                      fill="none"
+                      stroke="#f6931e"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    />
+                    <path
+                      id="Path_21"
+                      data-name="Path 21"
+                      d="M25.484,18H12.375"
+                      transform="translate(-11.556 -9.807)"
+                      fill="none"
+                      stroke="#f6931e"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    />
+                  </g>
+                </svg>
+              </v-list-tile-avatar>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -93,6 +179,12 @@ export default {
     availableLocales () {
       return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
     }
+  },
+  methods: {
+    async logout () {
+      await this.$auth.logout()
+      this.$router.push(this.localePath('login'))
+    }
   }
 }
 </script>
@@ -114,4 +206,9 @@ export default {
   max-width:65px;
   object-fit: cover;
 }
+.user-profile {
+  max-width: 50px;
+  object-fit: cover;
+}
+
 </style>
