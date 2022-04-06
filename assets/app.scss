@@ -1,23 +1,37 @@
+// @font-face {
+//   font-family: "GESS2";
+//   src: url("./fonts/GESSTwoBold.otf");
+//   font-weight: bold;
+// }
+
+// @font-face {
+//   font-family: "GESS2";
+//   src: url("./fonts/GESSTwoLight.otf");
+//   font-weight: 300;
+// }
+
+// @font-face {
+//   font-family: "GESS2";
+//   src: url("./fonts/GESSTwoMedium.otf");
+//   font-weight: 500;
+// }
+
 @font-face {
-  font-family: "GESS2";
-  src: url("./fonts/GESSTwoBold.otf");
+  font-family: "alriyadh";
+  src: url("./fonts/TatweerAlRiyadh-Light.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "alriyadh";
+  src: url("./fonts/TatweerAlRiyadh-Regular.otf") format("truetype");
   font-weight: bold;
-}
-
-@font-face {
-  font-family: "GESS2";
-  src: url("./fonts/GESSTwoLight.otf");
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: "GESS2";
-  src: url("./fonts/GESSTwoMedium.otf");
-  font-weight: 500;
+  font-style: normal;
 }
 
 body .v-application {
-  font-family: "GESS2" !important;
+  font-family: "alriyadh" !important;
   font-weight: 300;
 }
 
@@ -31,4 +45,11 @@ body .v-application {
 .main-title {
   color: #505050;
   font-weight: 100;
+}
+
+.theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state)
+  > .v-input__control
+  > .v-input__slot
+  fieldset {
+  color: #cecece !important;
 }

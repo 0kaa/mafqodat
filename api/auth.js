@@ -9,6 +9,9 @@ export default function axiosModule (axios) {
     },
     setNewPassword (passwordForm) {
       return axios.post('set-new-password', passwordForm)
+    },
+    updateProfile (profileForm) {
+      return axios.post('profile/update', profileForm)
     }
   }
 }

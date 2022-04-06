@@ -23,5 +23,14 @@ export default {
   confirmPassword: 'Confirm password',
   save: 'Save',
   profile: 'Profile',
-  logout: 'Logout'
+  logout: 'Logout',
+  firstName: 'First name',
+  familyName: 'Last name',
+  anotherAddress: 'Add another address',
+  address: 'Address',
+  country: 'Country',
+  city: 'City',
+  phone: 'Phone',
+  mobile: 'Mobile',
+  postCode: 'Post code'
 }

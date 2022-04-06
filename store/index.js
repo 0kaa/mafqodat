@@ -1,13 +1,16 @@
 export const state = () => ({
-  user: {},
-  token: ''
+  countries: [],
+  cities: []
 })
 
-// export const mutations = {
-//   setUser (state, user) {
-//     state.user = user
-//   }
-// }
+export const mutations = {
+  setCounties (state, countries) {
+    state.countries = countries
+  },
+  setCities (state, cities) {
+    state.cities = cities
+  }
+}
 
 // export const actions = {
 

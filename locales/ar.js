@@ -23,5 +23,14 @@ export default {
   confirmPassword: 'إعادة كتابة كلمة المرور',
   save: 'حفظ',
   profile: 'الملف الشخصى',
-  logout: 'تسجيل الخروج'
+  logout: 'تسجيل الخروج',
+  firstName: 'الاسم الاول',
+  familyName: 'اسم العائلة',
+  anotherAddress: 'إضافة عنونا اخر ان وجد',
+  address: 'العنوان',
+  country: 'الدولة',
+  city: 'المدينة',
+  phone: 'رقم الهاتف',
+  mobile: 'رقم الجوال',
+  postCode: 'الرمز البريدى'
 }

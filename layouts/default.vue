@@ -70,7 +70,8 @@
               <v-img
                 v-else
                 class="d-flex align-center text-center"
-
+                max-width="45"
+                max-height="45"
                 src="/arab.png"
               />
             </v-btn>
@@ -139,15 +140,11 @@
       </div>
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
     </v-app-bar>
-    <v-main>
-      <v-container>
-        <Nuxt />
+    <v-main style="background-color:#FBFCFF">
+      <v-container fluid>
+        <Nuxt keep-alive />
       </v-container>
     </v-main>
-
-    <v-footer absolute app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -179,6 +176,9 @@ export default {
     availableLocales () {
       return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
     }
+  },
+  created () {
+    this.$vuetify.rtl = this.$i18n.locale === 'ar'
   },
   methods: {
     async logout () {
