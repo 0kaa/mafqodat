@@ -21,7 +21,7 @@
             autocomplete="off"
             @submit.prevent="signin()"
           >
-            <v-card-bo>
+            <v-card-text>
               <v-text-field
                 v-model="login.email"
                 :label="$t('email')"
@@ -48,7 +48,7 @@
               <nuxt-link :to="localePath('forget-password')" class="text-link">
                 {{ $t('forgetPassword') }}
               </nuxt-link>
-            </v-card-bo>
+            </v-card-text>
 
             <v-card-actions class="justify-center">
               <v-btn
@@ -116,7 +116,7 @@ export default {
           this.loading = true
           await this.$auth.loginWith('local', { data: this.login })
           this.loading = false
-          this.$router.push(this.localePath('home'))
+          this.$router.push(this.localePath('/'))
           this.$refs.form.reset()
         }
       } catch (err) {

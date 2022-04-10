@@ -22,6 +22,7 @@ export default {
   setNewPassword: 'تعيين كلمة مرور جديدة',
   confirmPassword: 'إعادة كتابة كلمة المرور',
   save: 'حفظ',
+  saveData: 'حفظ البيانات',
   profile: 'الملف الشخصى',
   logout: 'تسجيل الخروج',
   firstName: 'الاسم الاول',
@@ -32,5 +33,35 @@ export default {
   city: 'المدينة',
   phone: 'رقم الهاتف',
   mobile: 'رقم الجوال',
-  postCode: 'الرمز البريدى'
+  postCode: 'الرمز البريدى',
+  changeProfilePicture: 'تغير صورة الملف الشخصي',
+  firstNameRequired: 'الاسم الاول مطلوب',
+  firstNameMinLength: 'يجب ان يكون الاسم الاول اكثر من 3 احرف',
+  familyNameRequired: 'اسم العائلة مطلوب',
+  familyNameMinLength: 'يجب ان يكون اسم العائلة اكثر من 3 احرف',
+  addressRequired: 'العنوان مطلوب',
+  addressMinLength: 'يجب ان يكون العنوان اكثر من 3 احرف',
+  phoneRequired: 'رقم الهاتف مطلوب',
+  phoneMinLength: 'يجب ان يكون رقم الهاتف اكثر من 8 احرف',
+  mobileRequired: 'رقم الجوال مطلوب',
+  mobileMinLength: 'يجب ان يكون رقم الجوال اكثر من 8 احرف',
+  addNewEmployee: 'اضافة موظف جديد',
+  addNewStation: 'اضافة محطة جديدة',
+  bus: 'الباص',
+  metro: 'المترو',
+  stationType: 'نوع المحطة',
+  stationNameAr: 'اسم المحطة بالعربية',
+  stationNameEn: 'اسم المحطة بالانجليزية',
+  stationNumber: 'رقم المحطة',
+  stationDescription: 'وصف المحطة',
+  employeesArchive: 'أرشيف الموظفين',
+  search: 'بحث',
+
+  // menu
+  menu: {
+    home: 'الرئيسية',
+    employees: 'الموظفين',
+    stations: 'المحطات',
+    settings: 'الاعدادات'
+  }
 }

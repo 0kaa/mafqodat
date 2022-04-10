@@ -22,6 +22,7 @@ export default {
   setNewPassword: 'Set a new password',
   confirmPassword: 'Confirm password',
   save: 'Save',
+  saveData: 'Save data',
   profile: 'Profile',
   logout: 'Logout',
   firstName: 'First name',
@@ -32,5 +33,35 @@ export default {
   city: 'City',
   phone: 'Phone',
   mobile: 'Mobile',
-  postCode: 'Post code'
+  postCode: 'Post code',
+  changeProfilePicture: 'Change profile picture',
+  firstNameRequired: 'First name is required',
+  firstNameMinLength: 'First name must be at least 3 characters long',
+  familyNameRequired: 'Family name is required',
+  familyNameMinLength: 'Family name must be at least 3 characters long',
+  addressRequired: 'Address is required',
+  addressMinLength: 'Address must be at least 3 characters long',
+  phoneRequired: 'Phone is required',
+  phoneMinLength: 'Phone must be at least 8 characters long',
+  mobileRequired: 'Mobile is required',
+  mobileMinLength: 'Mobile must be at least 8 characters long',
+  addNewEmployee: 'Add new employee',
+  addNewStation: 'Add new station',
+  bus: 'Bus',
+  metro: 'Metro',
+  stationType: 'Station type',
+  stationNameAr: 'Station name in Arabic',
+  stationNameEn: 'Station name in English',
+  stationNumber: 'Station number',
+  stationDescription: 'Station description',
+  employeesArchive: 'Employees archive',
+  search: 'Search',
+
+  // menu
+  menu: {
+    home: 'Home',
+    employees: 'Employees',
+    stations: 'Stations',
+    settings: 'Settings'
+  }
 }

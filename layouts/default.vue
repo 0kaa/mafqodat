@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       fixed
-      right
+      :right="availableLocales[0].code !== 'ar'"
       app
     >
       <div class="nav-image">
@@ -26,7 +26,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app color="white" class="justify-content-between">
+    <v-app-bar fixed app color="white" class="justify-space-between">
       <img src="/logo.png" class="logo">
       <v-spacer />
       <img src="/Saudi_Vision.png" class="saudi-vision">
@@ -141,7 +141,7 @@
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main style="background-color:#FBFCFF">
-      <v-container fluid>
+      <v-container fluid class="pt-8 px-8">
         <Nuxt keep-alive />
       </v-container>
     </v-main>
@@ -152,29 +152,36 @@
 export default {
   data () {
     return {
-
-      menus: [...Array(4)].map((_, i) => `Item ${i}`),
-      clipped: false,
-      drawer: true,
-      fixed: true,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false
+      drawer: true
     }
   },
   computed: {
     availableLocales () {
       return this.$i18n.locales.filter(i => i.code !== this.$i18n.locale)
+    },
+    items () {
+      return [
+        {
+          icon: 'mdi-home',
+          title: this.$t('menu.home'),
+          to: this.localePath('/')
+        },
+        {
+          icon: 'mdi-account-multiple-plus',
+          title: this.$t('menu.employees'),
+          to: this.localePath('/employees')
+        },
+        {
+          icon: 'mdi-bus-marker',
+          title: this.$t('menu.stations'),
+          to: this.localePath('/stations')
+        },
+        {
+          icon: 'mdi-cog',
+          title: this.$t('menu.settings'),
+          to: this.localePath('/profile')
+        }
+      ]
     }
   },
   created () {
