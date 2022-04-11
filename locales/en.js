@@ -27,6 +27,7 @@ export default {
   logout: 'Logout',
   firstName: 'First name',
   familyName: 'Last name',
+  fullName: 'Full name',
   anotherAddress: 'Add another address',
   address: 'Address',
   country: 'Country',
@@ -56,7 +57,7 @@ export default {
   stationDescription: 'Station description',
   employeesArchive: 'Employees archive',
   search: 'Search',
-
+  id: 'ID',
   // menu
   menu: {
     home: 'Home',

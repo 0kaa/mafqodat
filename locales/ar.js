@@ -27,6 +27,7 @@ export default {
   logout: 'تسجيل الخروج',
   firstName: 'الاسم الاول',
   familyName: 'اسم العائلة',
+  fullName: 'الاسم الكامل',
   anotherAddress: 'إضافة عنونا اخر ان وجد',
   address: 'العنوان',
   country: 'الدولة',
@@ -56,6 +57,7 @@ export default {
   stationDescription: 'وصف المحطة',
   employeesArchive: 'أرشيف الموظفين',
   search: 'بحث',
+  id: 'الرقم التعريفي',
 
   // menu
   menu: {

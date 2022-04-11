@@ -192,7 +192,6 @@
 
 <script>
 export default {
-
   data: () => ({
     valid: true,
     employee: {
@@ -223,6 +222,9 @@ export default {
     cities () {
       return this.employee.country ? this.employee.country.cities : []
     }
+  },
+  mounted () {
+    this.$refs.form.reset()
   },
   activated () {
     if (this.$fetchState.timestamp <= Date.now() - 30000) {
@@ -270,11 +272,11 @@ export default {
       return {
         first_name: [
           v => !!v || this.$t('firstNameRequired'),
-          v => v.length >= 3 || this.$t('firstNameMinLength')
+          v => (v && v.length >= 3) || this.$t('firstNameMinLength')
         ],
         family_name: [
           v => !!v || this.$t('familyNameRequired'),
-          v => v.length >= 3 || this.$t('familyNameMinLength')
+          v => (v && v.length >= 3) || this.$t('familyNameMinLength')
         ],
         email: [
           v => !!v || this.$t('emailRequired'),
@@ -286,15 +288,15 @@ export default {
         ],
         address: [
           v => !!v || this.$t('addressRequired'),
-          v => v.length >= 3 || this.$t('addressMinLength')
+          v => (v && v.length >= 3) || this.$t('addressMinLength')
         ],
         phone: [
           v => !!v || this.$t('phoneRequired'),
-          v => v.length >= 8 || this.$t('phoneMinLength')
+          v => (v && v.length >= 8) || this.$t('phoneMinLength')
         ],
         mobile: [
           v => !!v || this.$t('mobileRequired'),
-          v => v.length >= 8 || this.$t('mobileMinLength')
+          v => (v && v.length >= 8) || this.$t('mobileMinLength')
         ],
         country: [
           v => !!v || this.$t('emailRequired')
