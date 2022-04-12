@@ -3,7 +3,7 @@
     <div class="d-flex justify-space-between">
       <h2 class="main-title mb-6" v-text="$t('employeesArchive')" />
       <div class="d-flex gap-4 filter-section">
-        <input type="text" class="search-input" :placeholder="$t('search')">
+        <input v-model="search" type="text" class="search-input" :placeholder="$t('search')">
         <v-btn
           color="primary"
           depressed
@@ -21,25 +21,26 @@
         :headers="headers"
         :items="employees"
         :page.sync="page"
-        :items-per-page="itemsPerPage"
+        :items-per-page="meta.per_page"
         hide-default-footer
-        :server-items-length="itemsPerPage"
         :loading="loading"
-        class="elevation-1"
-        @page-count="pageCount = $event"
-      />
-      <div class="text-center pt-2">
+        :search="search"
+        class="elevation-2"
+      >
+        <template #[`item.actions`]="{ item }">
+          <v-btn :to="localePath(`/employees/${item.id}`)" class="me-4 primary--text" small elevation="0">
+            {{ $t('preview') }}
+          </v-btn>
+          <v-btn class="error--text" small elevation="0" @click="deleteEmployee(item.id)">
+            {{ $t('delete') }}
+          </v-btn>
+        </template>
+      </v-data-table>
+      <div class="text-center pt-8">
         <v-pagination
+          v-if="meta.last_page > 1"
           v-model="page"
-          :length="pageCount"
-        />
-        <v-text-field
-          :value="itemsPerPage"
-          label="Items per page"
-          type="number"
-          min="-1"
-          max="15"
-          @input="itemsPerPage = parseInt($event, 10)"
+          :length="meta.last_page"
         />
       </div>
     </div>
@@ -64,12 +65,11 @@
 export default {
   name: 'EmployeesArchive',
   data: () => ({
+    search: '',
     page: 1,
-    pageCount: 2,
-    itemsPerPage: 5,
-    options: {},
+    meta: {},
+    links: {},
     employees: [],
-    totalEmployees: 0,
     valid: true,
     snackbar: false,
     snackbarText: '',
@@ -78,7 +78,7 @@ export default {
     loading: false
   }),
   async fetch () {
-    await this.getAllEmployees()
+    await this.getAllEmployees(this.page)
   },
   computed: {
     headers () {
@@ -89,14 +89,15 @@ export default {
         { text: this.$t('mobile'), value: 'mobile' },
         { text: this.$t('email'), value: 'email' },
         { text: this.$t('country'), value: 'country.name' },
-        { text: this.$t('city'), value: 'city.name' }
+        { text: this.$t('city'), value: 'city.name' },
+        { text: '', value: 'actions', sortable: false }
       ]
     }
   },
   watch: {
-    options: {
-      handler () {
-        this.getAllEmployees()
+    page: {
+      handler (page) {
+        this.getAllEmployees(page)
       },
       deep: true
     }
@@ -108,39 +109,19 @@ export default {
   },
 
   methods: {
-    async getAllEmployees () {
+    async deleteEmployee (id) {
+
+    },
+    async getAllEmployees (page) {
       this.loading = true
-      await this.fetchEmployees()
+      await this.fetchEmployees(page)
       this.loading = false
     },
-    async fetchEmployees () {
-      // const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      const response = await this.$api.employees.getAll()
-      const items = response.data.data.data
-      const total = items.length
-      // if (sortBy.length === 1 && sortDesc.length === 1) {
-      //   items = items.sort((a, b) => {
-      //     const sortA = a[sortBy[0]]
-      //     const sortB = b[sortBy[0]]
-
-      //     if (sortDesc[0]) {
-      //       if (sortA < sortB) { return 1 }
-      //       if (sortA > sortB) { return -1 }
-      //       return 0
-      //     } else {
-      //       if (sortA < sortB) { return -1 }
-      //       if (sortA > sortB) { return 1 }
-      //       return 0
-      //     }
-      //   })
-      // }
-
-      // if (itemsPerPage > 0) {
-      //   items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-      // }
-
-      this.employees = items
-      this.totalEmployees = total
+    async fetchEmployees (page) {
+      const response = await this.$api.employees.getAll(page)
+      this.employees = response.data.data.data
+      this.meta = response.data.data.meta
+      this.links = response.data.data.links
     }
 
   }

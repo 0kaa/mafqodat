@@ -8,7 +8,6 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit.prevent="updateProfile()"
           >
             <v-card-text style="padding:0 !important">
               <v-row>
@@ -21,7 +20,6 @@
                     item-text="name"
                     item-value="id"
                     return-object
-                    :rules="rules().stationType"
                     background-color="white"
                     :menu-props="{ bottom: true, offsetY: true }"
                   />
@@ -30,7 +28,6 @@
                   <v-text-field
                     v-model="station.number"
                     :label="$t('stationNumber')"
-                    :rules="rules().number"
                     type="text"
                     outlined
                     required
@@ -44,7 +41,6 @@
                   <v-text-field
                     v-model="station.name_ar"
                     :label="$t('stationNameAr')"
-                    :rules="rules().name_ar"
                     type="text"
                     outlined
                     required
@@ -56,7 +52,6 @@
                   <v-text-field
                     v-model="station.name_en"
                     :label="$t('stationNameEn')"
-                    :rules="rules().name_en"
                     type="text"
                     outlined
                     required
@@ -149,29 +144,6 @@ export default {
   },
 
   methods: {
-    updateProfile () {
-      try {
-        if (this.$refs.form.validate()) {
-          this.loading = true
-          this.$api.stations.create(this.station).then((response) => {
-            this.loading = false
-            this.snackbar = true
-            this.snackbarColor = 'green'
-            this.snackbarText = response.data.message
-            this.$refs.form.reset()
-          }).catch((err) => {
-            this.loading = false
-            this.snackbarColor = 'red'
-            this.snackbarText = err.response.data.message
-            this.snackbar = true
-          })
-        }
-      } catch (error) {
-        this.snackbar = true
-        this.snackbarText = error.response.data.message
-        this.snackbarColor = 'red'
-      }
-    },
     rules () {
       return {
 
