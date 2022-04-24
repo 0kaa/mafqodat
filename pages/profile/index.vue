@@ -238,7 +238,7 @@ export default {
     await this.$auth.fetchUser()
     const countires = await this.$api.countries.getAll()
     this.user = { ...this.$auth.$state.user }
-    this.countries = countires.data.data
+    this.countries = countires.data.data.data
   },
   activated () {
     if (this.$fetchState.timestamp <= Date.now() - 30000) {

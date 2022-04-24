@@ -7,7 +7,7 @@
       app
     >
       <div class="nav-image">
-        <img src="/nav-image.png">
+        <v-img src="/nav-image.png" />
       </div>
       <v-list>
         <v-list-item
@@ -23,13 +23,25 @@
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
+          <v-btn
+            v-if="item.new"
+            color="primary"
+            outlined
+            :to="item.toNew"
+            icon
+            small
+            class="rounded-lg"
+            @click.stop
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar fixed app color="white" class="justify-space-between">
-      <img src="/logo.png" class="logo">
+      <v-img src="/logo.png" class="logo" />
       <v-spacer />
-      <img src="/Saudi_Vision.png" class="saudi-vision">
+      <v-img src="/Saudi_Vision.png" class="saudi-vision" />
       <v-spacer />
       <div class="d-flex" style="gap:10px">
         <v-btn
@@ -164,22 +176,34 @@ export default {
         {
           icon: 'mdi-home',
           title: this.$t('menu.home'),
-          to: this.localePath('/')
+          to: this.localePath('/'),
+          new: false
         },
         {
           icon: 'mdi-account-multiple-plus',
           title: this.$t('menu.employees'),
-          to: this.localePath('/employees')
+          to: this.localePath('/employees'),
+          new: !!this.$auth.user.permissions.includes('create_employee'),
+          toNew: this.localePath('/employees/new')
         },
         {
           icon: 'mdi-bus-marker',
           title: this.$t('menu.stations'),
-          to: this.localePath('/stations')
+          to: this.localePath('/stations'),
+          new: !!this.$auth.user.permissions.includes('create_station'),
+          toNew: this.localePath('/stations/new')
+        },
+        {
+          icon: 'mdi-note-text',
+          title: this.$t('logs'),
+          to: this.localePath('/logs'),
+          new: false
         },
         {
           icon: 'mdi-cog',
           title: this.$t('menu.settings'),
-          to: this.localePath('/profile')
+          to: this.localePath('/profile'),
+          new: false
         }
       ]
     }

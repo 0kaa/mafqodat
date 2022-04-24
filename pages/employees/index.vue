@@ -26,14 +26,17 @@
         :loading="loading"
         :search="search"
         class="elevation-2"
+        :no-data-text="$t('noData')"
       >
-        <template #[`item.actions`]="{ item }">
-          <v-btn :to="localePath(`/employees/${item.id}`)" class="me-4 primary--text" small elevation="0">
-            {{ $t('preview') }}
-          </v-btn>
-          <v-btn class="error--text" small elevation="0" @click="deleteEmployee(item.id)">
-            {{ $t('delete') }}
-          </v-btn>
+        <template v-if="$auth.user.permissions.includes('update_employee') || $auth.user.permissions.includes('delete_employee')" #[`item.actions`]="{ item }">
+          <div class="d-flex gap-2">
+            <v-btn v-if="$auth.user.permissions.includes('update_employee')" :to="localePath(`/employees/${item.id}`)" class="primary--text" small elevation="0">
+              {{ $t('edit') }}
+            </v-btn>
+            <v-btn v-if="$auth.user.permissions.includes('delete_employee')" class="error--text" small elevation="0" @click="deleteEmployee(item.id)">
+              {{ $t('delete') }}
+            </v-btn>
+          </div>
         </template>
       </v-data-table>
       <div class="text-center pt-8">
@@ -103,14 +106,27 @@ export default {
     }
   },
   activated () {
-    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+    if (this.$fetchState.timestamp <= Date.now() - 5000) {
       this.$fetch()
     }
   },
 
   methods: {
     async deleteEmployee (id) {
-
+      try {
+        this.loading = true
+        await this.$api.employees.delete(id)
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = this.$t('employeeDeleted')
+        this.snackbarColor = 'green'
+        this.$fetch()
+      } catch (error) {
+        this.loading = false
+        this.snackbar = true
+        this.snackbarText = error.message
+        this.snackbarColor = 'red'
+      }
     },
     async getAllEmployees (page) {
       this.loading = true

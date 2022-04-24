@@ -1,22 +1,45 @@
 <template>
-  <v-row justify="center" align="center">
-    <button @click="logout">
-      {{ $t('login') }}
-    </button>
-  </v-row>
+  <div>
+    <input v-model="name" placeholder="name">
+    <input v-model="id" placeholder="id">
+    <div v-for="(order,i) in orderItems" :key="i" class="d-flex gap-10">
+      <div class="me-2">
+        {{ order.name }}
+      </div>
+      <div>
+        {{ order.id }}
+      </div>
+    </div>
+    <v-btn color="success" @click="pushInsideOrders">
+      Add order
+    </v-btn>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Home',
+  data: () => ({
+    id: '',
+    name: '',
+    orderItems: []
+  }),
   // middleware: 'auth',
   mounted () {
     this.$api.categories.getAll()
   },
   methods: {
-    async logout () {
-      await this.$auth.logout()
-      this.$router.push(this.localePath('login'))
+    pushInsideOrders () {
+      const order = {
+        piece_name: this.name,
+        id: this.id
+      }
+      order.attributes = [1, 2]
+      this.orderItems.push(order)
+
+      this.name = ''
+      this.id = ''
+      this.step = 1
     }
   }
 }

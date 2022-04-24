@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --max-old-space-size=8192 --optimize_for_size",
     "dev:host": "nuxt --hostname 192.168.1.20 --port 8080",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -20,7 +20,8 @@
     "core-js": "^3.15.1",
     "js-cookie": "^3.0.1",
     "nuxt": "^2.15.7",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "vue2-google-maps": "0.10.7"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",

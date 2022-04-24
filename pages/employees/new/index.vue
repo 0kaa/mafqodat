@@ -111,6 +111,8 @@
                     v-model="employee.phone"
                     :label="$t('phone')"
                     :rules="rules().phone"
+                    type="text"
+                    name="phone-number"
                     outlined
                     required
                     color="black"
@@ -122,6 +124,8 @@
                     v-model="employee.mobile"
                     :label="$t('mobile')"
                     :rules="rules().mobile"
+                    type="text"
+                    name="phone-number"
                     outlined
                     required
                     color="black"
@@ -135,6 +139,7 @@
                     v-model="employee.email"
                     :label="$t('email')"
                     :rules="rules().email"
+                    type="email"
                     outlined
                     required
                     color="black"
@@ -154,6 +159,33 @@
                     background-color="white"
                     @click:append="showPassword = !showPassword"
                   />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-select
+                    v-model="employee.permissions"
+                    :items="permissions"
+                    :label="$t('permissions')"
+                    item-text="name"
+                    item-value="value"
+                    background-color="white"
+                    :menu-props="{ top: true, offsetY: true }"
+                    multiple
+                    outlined
+                  >
+                    <template #selection="{ item, index }">
+                      <v-chip v-if="index === 0">
+                        <span>{{ item.name }}</span>
+                      </v-chip>
+                      <span
+                        v-if="index === 1"
+                        class="grey--text text-caption"
+                      >
+                        (+{{ employee.permissions.length - 1 }} others)
+                      </span>
+                    </template>
+                  </v-select>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -192,6 +224,11 @@
 
 <script>
 export default {
+  middleware ({ $auth, redirect }) {
+    if (!$auth.user.permissions.includes('create_employee')) {
+      return redirect('/employees')
+    }
+  },
   data: () => ({
     valid: true,
     employee: {
@@ -205,18 +242,22 @@ export default {
       mobile: '',
       email: '',
       post_code: '',
-      password: ''
+      password: '',
+      permissions: []
     },
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
     showPassword: false,
     loading: false,
-    countries: []
+    countries: [],
+    permissions: []
   }),
   async fetch () {
     const countires = await this.$api.countries.getAll()
-    this.countries = countires.data.data
+    const permissions = await this.$api.auth.permissions()
+    this.countries = countires.data.data.data
+    this.permissions = permissions.data.data
   },
   computed: {
     cities () {
@@ -247,7 +288,8 @@ export default {
             mobile: this.employee.mobile,
             email: this.employee.email,
             post_code: this.employee.post_code,
-            password: this.employee.password
+            password: this.employee.password,
+            permissions: this.employee.permissions
           }
           this.$api.employees.create(employeeData).then((response) => {
             this.loading = false
@@ -255,6 +297,7 @@ export default {
             this.snackbarColor = 'green'
             this.snackbarText = response.data.message
             this.$refs.form.reset()
+            this.$router.push('/employees')
           }).catch((err) => {
             this.loading = false
             this.snackbarColor = 'red'
@@ -299,10 +342,10 @@ export default {
           v => (v && v.length >= 8) || this.$t('mobileMinLength')
         ],
         country: [
-          v => !!v || this.$t('emailRequired')
+          v => !!v || this.$t('countryRequired')
         ],
         city: [
-          v => !!v || this.$t('emailRequired')
+          v => !!v || this.$t('cityRequired')
         ]
 
       }

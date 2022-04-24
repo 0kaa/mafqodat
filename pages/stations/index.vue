@@ -26,14 +26,17 @@
         :loading="loading"
         :search="search"
         class="elevation-2"
+        :no-data-text="$t('noData')"
       >
-        <template #[`item.actions`]="{ item }">
-          <v-btn :to="localePath(`/stations/${item.id}`)" class="me-4 primary--text" elevation="0" small>
-            {{ $t('preview') }}
-          </v-btn>
-          <v-btn class="error--text" elevation="0" small @click="deleteStation(item.id)">
-            {{ $t('delete') }}
-          </v-btn>
+        <template v-if="$auth.user.permissions.includes('update_station') || $auth.user.permissions.includes('delete_station')" #[`item.actions`]="{ item }">
+          <div class="d-flex gap-2">
+            <v-btn v-if="$auth.user.permissions.includes('update_station')" :to="localePath(`/stations/${item.id}`)" class="primary--text" elevation="0" small>
+              {{ $t('edit') }}
+            </v-btn>
+            <v-btn v-if="$auth.user.permissions.includes('delete_station')" class="error--text" elevation="0" small @click="deleteStation(item.id)">
+              {{ $t('delete') }}
+            </v-btn>
+          </div>
         </template>
       </v-data-table>
       <div class="text-center pt-8">
@@ -84,7 +87,7 @@ export default {
     headers () {
       return [
         { text: this.$t('id'), value: 'id' },
-        { text: this.$t('stationType'), value: 'type' },
+        { text: this.$t('stationType'), value: 'type.name' },
         { text: this.$t('stationName'), value: 'name' },
         { text: this.$t('stationNumber'), value: 'number' },
         { text: this.$t('stationDescription'), value: 'description' },
@@ -102,14 +105,24 @@ export default {
     }
   },
   activated () {
-    if (this.$fetchState.timestamp <= Date.now() - 30000) {
+    if (this.$fetchState.timestamp <= Date.now() - 5000) {
       this.$fetch()
     }
   },
 
   methods: {
     async deleteStation (id) {
-
+      try {
+        const response = await this.$api.stations.delete(id)
+        this.snackbar = true
+        this.snackbarText = response.data.message
+        this.snackbarColor = 'green'
+        this.$fetch()
+      } catch (e) {
+        this.snackbar = true
+        this.snackbarText = e.response.data.message
+        this.snackbarColor = 'red'
+      }
     },
     async getAllStations (page) {
       this.loading = true

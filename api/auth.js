@@ -12,6 +12,12 @@ export default function axiosModule (axios) {
     },
     updateProfile (profileForm) {
       return axios.post('profile/update', profileForm)
+    },
+    permissions () {
+      return axios.get('permission-list')
+    },
+    logs () {
+      return axios.get('logs')
     }
   }
 }

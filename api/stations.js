@@ -4,6 +4,9 @@ export default function stations (axios) {
     getAll (page = 1) {
       return axios.get(`stations?page=${page}`)
     },
+    get (id) {
+      return axios.get(`stations/show/${id}`)
+    },
     create (station) {
       return axios.post('stations/create', station)
     },

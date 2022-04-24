@@ -39,7 +39,8 @@ export default {
   plugins: [
     { src: '~/plugins/api.js' },
     { src: '~/plugins/axios.js' },
-    { src: '~/plugins/i18n.js' }
+    { src: '~/plugins/i18n.js' },
+    { src: '~/plugins/google-maps.js', client: true }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

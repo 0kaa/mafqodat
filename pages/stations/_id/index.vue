@@ -8,7 +8,7 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit.prevent="createStation"
+            @submit.prevent="updateStation"
           >
             <v-card-text style="padding:0 !important">
               <v-row>
@@ -20,6 +20,7 @@
                     :label="$t('stationType')"
                     item-text="name"
                     item-value="value"
+                    return-object
                     background-color="white"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :rules="rules().stationType"
@@ -30,7 +31,6 @@
                     v-model="station.number"
                     :label="$t('stationNumber')"
                     type="text"
-                    name="station-number"
                     outlined
                     required
                     color="black"
@@ -45,7 +45,6 @@
                     v-model="station.name_ar"
                     :label="$t('stationNameAr')"
                     type="text"
-                    name="station-name-arabic"
                     outlined
                     required
                     color="black"
@@ -58,7 +57,6 @@
                     v-model="station.name_en"
                     :label="$t('stationNameEn')"
                     type="text"
-                    name="station-name-english"
                     outlined
                     required
                     color="black"
@@ -81,8 +79,8 @@
                 </v-col>
               </v-row>
               <gmap-autocomplete
-                :value="station.location"
                 class="autocomplete-input"
+                :value="station.location"
                 :placeholder="$t('stationLocation')"
                 @place_changed="updatePlace"
               />
@@ -138,8 +136,22 @@ import { gmapApi } from '~/node_modules/vue2-google-maps'
 
 export default {
   middleware ({ $auth, redirect }) {
-    if (!$auth.user.permissions.includes('create_station')) {
+    if (!$auth.user.permissions.includes('update_station')) {
       return redirect('/stations')
+    }
+  },
+  async asyncData ({ params, $api, redirect }) {
+    try {
+      const station = await $api.stations.get(params.id)
+      return {
+        station: station.data.data,
+        mapCenter: {
+          lat: station.data.data.lat,
+          lng: station.data.data.lng
+        }
+      }
+    } catch (e) {
+      redirect('/stations')
     }
   },
   data: () => ({
@@ -190,6 +202,10 @@ export default {
       this.mapCenter.lat = position.coords.latitude
       this.mapCenter.lng = position.coords.longitude
     })
+    setTimeout(() => {
+      this.mapCenter.lat = +this.station.lat
+      this.mapCenter.lng = +this.station.lng
+    }, 1000)
   },
   methods: {
     dragMarker (e) {
@@ -219,6 +235,38 @@ export default {
       this.updateCenter(place.geometry.location)
       this.station.location = place.formatted_address
     },
+    updateStation () {
+      try {
+        if (this.$refs.form.validate()) {
+          this.loading = true
+          const stationData = {
+            type: this.station.type.value,
+            name_ar: this.station.name_ar,
+            name_en: this.station.name_en,
+            number: this.station.number,
+            description: this.station.description,
+            location: this.station.location,
+            lat: this.station.lat,
+            lng: this.station.lng
+          }
+          this.$api.stations.update(this.station.id, stationData).then((response) => {
+            this.loading = false
+            this.snackbar = true
+            this.snackbarColor = 'green'
+            this.snackbarText = response.data.message
+          }).catch((err) => {
+            this.loading = false
+            this.snackbarColor = 'red'
+            this.snackbarText = err.response.data.message
+            this.snackbar = true
+          })
+        }
+      } catch (error) {
+        this.snackbar = true
+        this.snackbarText = error.response.data.message
+        this.snackbarColor = 'red'
+      }
+    },
     async createStation () {
       this.loading = true
       this.valid = this.$refs.form.validate()
@@ -229,9 +277,6 @@ export default {
           this.snackbarText = response.data.message
           this.snackbarColor = 'green'
           this.loading = false
-          await this.$refs.form.reset()
-          this.station.location = ''
-          this.$router.push('/stations')
         } catch (error) {
           this.snackbar = true
           this.snackbarText = error.response.data.message
