@@ -40,39 +40,3 @@ export default {
 
 }
 </script>
-<style>
-.log-item {
-  padding: 22px 28px;
-  border-bottom: 1px solid #e1e1e1;
-  text-align: start;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: start;
-}
-
-.log-item:last-child {
-  border: none;
-}
-
-.log-item.log-rtl {
-  text-align: right;
-}
-
-.log-item .log-message {
-  direction: ltr;
-  color: #363636;
-  font-size: 16px;
-  font-weight: light;
-}
-
-.log-item .log-date {
-  color: #7B7B7B;
-  font-size: 14px;
-  font-weight: light;
-}
-.log-item .log-image {
-  border-radius: 4px;
-  overflow: hidden;
-}
-</style>

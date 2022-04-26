@@ -16,8 +16,8 @@ export default function axiosModule (axios) {
     permissions () {
       return axios.get('permission-list')
     },
-    logs () {
-      return axios.get('logs')
+    logs (page = 1) {
+      return axios.get(`logs?page=${page}`)
     }
   }
 }

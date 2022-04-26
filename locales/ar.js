@@ -78,6 +78,7 @@ export default {
   cityRequired: 'المدينة مطلوبة',
   permissions: 'الصلاحيات',
   logs: 'السجلات',
+  loadMore: 'عرض المزيد',
   // menu
   menu: {
     home: 'الرئيسية',

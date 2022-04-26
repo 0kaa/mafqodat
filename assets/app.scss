@@ -68,3 +68,43 @@ body .v-application {
 .gap-2 {
   gap: 8px;
 }
+
+.logs-container {
+  border: 1px solid #cecece;
+  border-radius: 8px;
+}
+
+.log-item {
+  padding: 22px 28px;
+  border-bottom: 1px solid #e1e1e1;
+  text-align: start;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.log-item::last-child {
+  border: none;
+}
+
+.log-item.log-rtl {
+  text-align: right;
+}
+
+.log-item .log-message {
+  direction: ltr;
+  color: #363636;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.log-item .log-date {
+  color: #7b7b7b;
+  font-size: 14px;
+  font-weight: 300;
+}
+.log-item .log-image {
+  border-radius: 4px;
+  overflow: hidden;
+}

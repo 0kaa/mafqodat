@@ -78,6 +78,7 @@ export default {
   cityRequired: 'City is required',
   permissions: 'Permissions',
   logs: 'Logs',
+  loadMore: 'Load more',
   // menu
   menu: {
     home: 'Home',
