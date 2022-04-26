@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 export default function axiosModule (axios) {
   return {
+    all () {
+      return axios.get('categories?all=true')
+    },
     getAll () {
       return axios.get('categories')
     },

@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 export default function stations (axios) {
   return {
+    all () {
+      return axios.get('stations?all=true')
+    },
     getAll (page = 1) {
       return axios.get(`stations?page=${page}`)
     },
