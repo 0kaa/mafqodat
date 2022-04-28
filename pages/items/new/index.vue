@@ -78,6 +78,7 @@
                         outlined
                         color="black"
                         background-color="white"
+                        :rules="rules().itemDate"
                         v-bind="attrs"
                         v-on="on"
                       />
@@ -92,14 +93,14 @@
                         color="primary"
                         @click="modal = false"
                       >
-                        Cancel
+                        {{ $t('cancel') }}
                       </v-btn>
                       <v-btn
                         text
                         color="primary"
                         @click="$refs.dialog.save(item.date)"
                       >
-                        OK
+                        {{ $t('ok') }}
                       </v-btn>
                     </v-date-picker>
                   </v-dialog>
@@ -125,25 +126,13 @@
                         v-on="on"
                       />
                     </template>
-                    <v-time-picker
-                      v-if="modal2"
-                      v-model="item.time"
-                      full-width
-                    >
+                    <v-time-picker v-if="modal2" v-model="item.time" full-width>
                       <v-spacer />
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="modal2 = false"
-                      >
-                        Cancel
+                      <v-btn text color="primary" @click="modal2 = false">
+                        {{ $t('cancel') }}
                       </v-btn>
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.lostTime.save(item.time)"
-                      >
-                        OK
+                      <v-btn text color="primary" @click="$refs.lostTime.save(item.time)">
+                        {{ $t('ok') }}
                       </v-btn>
                     </v-time-picker>
                   </v-dialog>
@@ -417,6 +406,9 @@ export default {
         ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')
+        ],
+        itemDate: [
+          v => !!v || this.$t('pleaseFillDate')
         ],
         itemTime: [
           v => !!v || this.$t('pleaseFillTime')

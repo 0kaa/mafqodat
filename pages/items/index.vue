@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-space-between">
-      <h2 class="main-title mb-6" v-text="$t('stationsArchive')" />
+      <h2 class="main-title mb-6" v-text="$t('itemsArchive')" />
       <div class="d-flex gap-4 filter-section">
         <input v-model="search" type="text" class="search-input" :placeholder="$t('search')">
         <v-btn
@@ -19,7 +19,7 @@
     <div>
       <v-data-table
         :headers="headers"
-        :items="stations"
+        :items="items"
         :page.sync="page"
         :items-per-page="meta.per_page"
         hide-default-footer
@@ -33,7 +33,7 @@
             <v-btn v-if="$auth.user.permissions.includes('update_station')" :to="localePath(`/stations/${item.id}`)" class="primary--text" elevation="0" small>
               {{ $t('edit') }}
             </v-btn>
-            <v-btn v-if="$auth.user.permissions.includes('delete_station')" class="error--text" elevation="0" small @click="deleteStation(item.id)">
+            <v-btn v-if="$auth.user.permissions.includes('delete_station')" class="error--text" elevation="0" small @click="deleteItem(item.id)">
               {{ $t('delete') }}
             </v-btn>
           </div>
@@ -72,7 +72,7 @@ export default {
     page: 1,
     meta: {},
     links: {},
-    stations: [],
+    items: [],
     valid: true,
     snackbar: false,
     snackbarText: '',
@@ -81,17 +81,17 @@ export default {
     loading: false
   }),
   async fetch () {
-    await this.getAllStations(this.page)
+    await this.getAllItems(this.page)
   },
   computed: {
     headers () {
       return [
         { text: this.$t('id'), value: 'id' },
-        { text: this.$t('stationType'), value: 'type.name' },
-        { text: this.$t('stationName'), value: 'name' },
-        { text: this.$t('stationNumber'), value: 'number' },
-        { text: this.$t('stationDescription'), value: 'description' },
-        { text: this.$t('stationLocation'), value: 'location' },
+        { text: this.$t('date'), value: 'fulldate' },
+        { text: this.$t('category'), value: 'category.name' },
+        { text: this.$t('stationName'), value: 'station.name' },
+        { text: this.$t('stationNumber'), value: 'station.number' },
+        { text: this.$t('stationLocation'), value: 'station.location' },
         { text: '', value: 'actions', sortable: false }
       ]
     }
@@ -99,7 +99,7 @@ export default {
   watch: {
     page: {
       handler (page) {
-        this.getAllStations(page)
+        this.getAllItems(page)
       },
       deep: true
     }
@@ -111,9 +111,9 @@ export default {
   },
 
   methods: {
-    async deleteStation (id) {
+    async deleteItem (id) {
       try {
-        const response = await this.$api.stations.delete(id)
+        const response = await this.$api.items.delete(id)
         this.snackbar = true
         this.snackbarText = response.data.message
         this.snackbarColor = 'green'
@@ -124,14 +124,14 @@ export default {
         this.snackbarColor = 'red'
       }
     },
-    async getAllStations (page) {
+    async getAllItems (page) {
       this.loading = true
-      await this.fetchStations(page)
+      await this.fetchItems(page)
       this.loading = false
     },
-    async fetchStations (page) {
-      const response = await this.$api.stations.getAll(page)
-      this.stations = response.data.data.data
+    async fetchItems (page) {
+      const response = await this.$api.items.getAll(page)
+      this.items = response.data.data.data
       this.meta = response.data.data.meta
       this.links = response.data.data.links
     }

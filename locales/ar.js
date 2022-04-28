@@ -93,9 +93,16 @@ export default {
   pleaseFillCost: 'يرجى ملء قيمة المفقود',
   pleaseSelectStationType: 'يرجى اختيار نوع المحطة',
   pleaseFillTime: 'يرجى ملء الوقت',
+  pleaseFillDate: 'يرجى ملء التاريخ',
   pleaseFillStorage: 'يرجى ملء مكان التخزين',
   pleaseFillDetails: 'يرجى ملء التفاصيل',
   uploadImage: 'ارفق صورة',
+  ok: 'موافق',
+  cancel: 'الغاء',
+  category: 'نوع المفقود',
+  date: 'وقت و تاريخ',
+  location: 'مكان المفقود',
+  itemsArchive: 'أرشيف المفقودات',
   // menu
   menu: {
     home: 'الرئيسية',

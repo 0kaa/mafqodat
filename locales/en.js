@@ -93,9 +93,16 @@ export default {
   pleaseFillCost: 'Please fill cost',
   pleaseSelectStationType: 'Please select station type',
   pleaseFillTime: 'Please fill time',
+  pleaseFillDate: 'Please fill date',
   pleaseFillStorage: 'Please fill storage',
   pleaseFillDetails: 'Please fill details',
   uploadImage: 'Upload image',
+  ok: 'Ok',
+  cancel: 'Cancel',
+  category: 'Category',
+  date: 'Date',
+  location: 'Location',
+  itemsArchive: 'Items archive',
   // menu
   menu: {
     home: 'Home',
