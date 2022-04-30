@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="main-title mb-6" v-text="$t('addNewStation')" />
+    <h2 class="main-title mb-6" v-text="$t('addNewItem')" />
     <v-row justify="space-between">
       <v-col lg="9" cols="12" order="2" order-lg="1">
         <div class="inputs">
@@ -8,16 +8,52 @@
             ref="form"
             v-model="valid"
             lazy-validation
-            @submit.prevent="updateStation"
+            @submit.prevent="updateItem"
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col>
+                <v-col lg="6">
                   <v-select
-                    v-model="station.type"
-                    :items="stationTypes"
+                    v-model="item.category"
+                    :items="categories"
                     outlined
-                    :label="$t('stationType')"
+                    :label="$t('itemType')"
+                    item-text="name"
+                    item-value="value"
+                    return-object
+                    background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                    :rules="rules().itemCategory"
+                  />
+                </v-col>
+                <v-col v-if="item.category && item.category.slug === 'other'" lg="6">
+                  <v-text-field
+                    v-model="item.type"
+                    :label="$t('writeItemType')"
+                    :rules="rules().itemType"
+                    outlined
+                    required
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col v-if="item.category && item.category.slug === 'money'" lg="6">
+                  <v-text-field
+                    v-model="item.cost"
+                    :label="$t('lostItemCost')"
+                    :rules="rules().itemCost"
+                    outlined
+                    required
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col lg="6">
+                  <v-select
+                    v-model="item.station"
+                    :items="stations"
+                    outlined
+                    :label="$t('chooseStation')"
                     item-text="name"
                     item-value="value"
                     return-object
@@ -26,51 +62,99 @@
                     :rules="rules().stationType"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6">
+                  <v-dialog
+                    ref="dialog"
+                    v-model="modal"
+                    :return-value.sync="item.date"
+                    persistent
+                    width="290px"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="item.date"
+                        :label="$t('lostDate')"
+                        readonly
+                        outlined
+                        color="black"
+                        background-color="white"
+                        :rules="rules().itemDate"
+                        v-bind="attrs"
+                        v-on="on"
+                      />
+                    </template>
+                    <v-date-picker
+                      v-model="item.date"
+                      scrollable
+                    >
+                      <v-spacer />
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="modal = false"
+                      >
+                        {{ $t('cancel') }}
+                      </v-btn>
+                      <v-btn
+                        text
+                        color="primary"
+                        @click="$refs.dialog.save(item.date)"
+                      >
+                        {{ $t('ok') }}
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+                <v-col lg="6">
+                  <v-dialog
+                    ref="lostTime"
+                    v-model="modal2"
+                    :return-value.sync="item.time"
+                    persistent
+                    width="290px"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="item.time"
+                        :label="$t('lostTime')"
+                        outlined
+                        readonly
+                        color="black"
+                        background-color="white"
+                        v-bind="attrs"
+                        :rules="rules().itemTime"
+                        v-on="on"
+                      />
+                    </template>
+                    <v-time-picker v-if="modal2" v-model="item.time" full-width>
+                      <v-spacer />
+                      <v-btn text color="primary" @click="modal2 = false">
+                        {{ $t('cancel') }}
+                      </v-btn>
+                      <v-btn text color="primary" @click="$refs.lostTime.save(item.time)">
+                        {{ $t('ok') }}
+                      </v-btn>
+                    </v-time-picker>
+                  </v-dialog>
+                </v-col>
+                <v-col lg="6">
                   <v-text-field
-                    v-model="station.number"
-                    :label="$t('stationNumber')"
-                    type="text"
+                    v-model="item.storage"
+                    :label="$t('storagePlace')"
+                    :rules="rules().storage"
                     outlined
                     required
                     color="black"
                     background-color="white"
-                    :rules="rules().stationNumber"
                   />
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="station.name_ar"
-                    :label="$t('stationNameAr')"
-                    type="text"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                    :rules="rules().stationNameAr"
-                  />
-                </v-col>
-                <v-col>
-                  <v-text-field
-                    v-model="station.name_en"
-                    :label="$t('stationNameEn')"
-                    type="text"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                    :rules="rules().stationNameEn"
-                  />
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
+                <v-col lg="6">
                   <v-textarea
-                    v-model="station.description"
-                    :label="$t('stationDescription')"
-                    type="text"
+                    v-model="item.details"
+                    rows="2"
+                    auto-grow
+                    :label="$t('details')"
+                    :rules="rules().details"
                     outlined
                     required
                     color="black"
@@ -78,9 +162,10 @@
                   />
                 </v-col>
               </v-row>
+
               <gmap-autocomplete
+                :value="item.location"
                 class="autocomplete-input"
-                :value="station.location"
                 :placeholder="$t('stationLocation')"
                 @place_changed="updatePlace"
               />
@@ -114,6 +199,40 @@
           </v-form>
         </div>
       </v-col>
+      <v-col lg="3" cols="12" order="1" order-lg="2">
+        <div class="user-profile-container">
+          <v-img
+            v-if="!item.image && !imgPreview"
+            class="d-flex align-center text-center"
+            src="/item_image.png"
+            @click="onButtonClick"
+          />
+          <v-img
+            v-if="item.image && !imgPreview"
+            :src="item.image"
+            class="user-profile"
+            @click="onButtonClick"
+          />
+          <v-img
+            v-if="imgPreview"
+            :src="imgPreview"
+            class="user-profile"
+            @click="onButtonClick"
+          />
+        </div>
+        <div class="mt-5 d-flex justify-center">
+          <input
+            ref="uploader"
+            class="d-none"
+            type="file"
+            accept="image/png,image/jpg,image/jpeg"
+            @change="onFileChanged"
+          >
+          <v-btn color="primary" text x-large class="text-capitalize" @click="onButtonClick">
+            {{ $t('uploadImage') }}
+          </v-btn>
+        </div>
+      </v-col>
     </v-row>
     <v-snackbar v-model="snackbar" :timeout="8000" :color="snackbarColor">
       {{ snackbarText }}
@@ -135,42 +254,48 @@
 import { gmapApi } from '~/node_modules/vue2-google-maps'
 
 export default {
-  middleware ({ $auth, redirect }) {
-    if (!$auth.user.permissions.includes('update_station')) {
-      return redirect('/stations')
-    }
-  },
-  async asyncData ({ params, $api, redirect }) {
+  async asyncData ({ $api, params, redirect }) {
     try {
-      const station = await $api.stations.get(params.id)
+      const categories = await $api.categories.all()
+      const stations = await $api.stations.all()
+      const item = await $api.items.get(params.id)
       return {
-        station: station.data.data,
-        mapCenter: {
-          lat: station.data.data.lat,
-          lng: station.data.data.lng
-        }
+        categories: categories.data.data,
+        stations: stations.data.data,
+        item: item.data.data
       }
-    } catch (e) {
-      redirect('/stations')
+    } catch (error) {
+      return redirect('/items')
     }
   },
   data: () => ({
+    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    menu: false,
+    modal: false,
+    menu2: false,
+    time: null,
+    modal2: false,
     mapLatLng: '',
     place: '',
     mapCenter: {
       lat: -8.504455,
       lng: 115.262349
     },
+    imgPreview: '',
     google: '',
     map: '',
     valid: true,
-    station: {
+    item: {
+      category: '',
+      station: '',
       type: '',
-      name_ar: '',
-      name_en: '',
-      number: '',
-      description: '',
+      cost: '',
+      date: '',
+      time: '',
+      details: '',
+      storage: '',
       location: '',
+      image: '',
       lat: '',
       lng: ''
     },
@@ -202,19 +327,24 @@ export default {
       this.mapCenter.lat = position.coords.latitude
       this.mapCenter.lng = position.coords.longitude
     })
-    setTimeout(() => {
-      this.mapCenter.lat = +this.station.lat
-      this.mapCenter.lng = +this.station.lng
-    }, 1000)
   },
   methods: {
+    onButtonClick () {
+      this.isSelecting = true
+      window.addEventListener('focus', () => { this.isSelecting = false }, { once: true })
+      this.$refs.uploader.click()
+    },
+    onFileChanged (e) {
+      this.item.image = e.target.files[0]
+      if (this.item.image) { this.imgPreview = URL.createObjectURL(e.target.files[0]) } else { this.imgPreview = '' }
+    },
     dragMarker (e) {
       const geocoder = new this.googleM.maps.Geocoder()
-      this.station.lat = e.latLng.lat()
-      this.station.lng = e.latLng.lng()
+      this.item.lat = e.latLng.lat()
+      this.item.lng = e.latLng.lng()
       geocoder.geocode(
         { latLng: { lat: e.latLng.lat(), lng: e.latLng.lng() } },
-        (responses) => { if (responses && responses.length > 0) { this.station.location = responses[0].formatted_address } }
+        (responses) => { if (responses && responses.length > 0) { this.item.location = responses[0].formatted_address } }
       )
     },
     setLocation (e) {
@@ -228,55 +358,34 @@ export default {
         lat: location.lat(),
         lng: location.lng()
       }
-      this.station.lat = location.lat()
-      this.station.lng = location.lng()
+      this.item.lat = location.lat()
+      this.item.lng = location.lng()
     },
     updatePlace (place) {
       this.updateCenter(place.geometry.location)
-      this.station.location = place.formatted_address
+      this.item.location = place.formatted_address
     },
-    updateStation () {
-      try {
-        if (this.$refs.form.validate()) {
-          this.loading = true
-          const stationData = {
-            type: this.station.type.value,
-            name_ar: this.station.name_ar,
-            name_en: this.station.name_en,
-            number: this.station.number,
-            description: this.station.description,
-            location: this.station.location,
-            lat: this.station.lat,
-            lng: this.station.lng
-          }
-          this.$api.stations.update(this.station.id, stationData).then((response) => {
-            this.loading = false
-            this.snackbar = true
-            this.snackbarColor = 'green'
-            this.snackbarText = response.data.message
-          }).catch((err) => {
-            this.loading = false
-            this.snackbarColor = 'red'
-            this.snackbarText = err.response.data.message
-            this.snackbar = true
-          })
-        }
-      } catch (error) {
-        this.snackbar = true
-        this.snackbarText = error.response.data.message
-        this.snackbarColor = 'red'
-      }
-    },
-    async createStation () {
+    async updateItem () {
       this.loading = true
       this.valid = this.$refs.form.validate()
       if (this.valid) {
         try {
-          const response = await this.$api.stations.create(this.station)
+          const formData = new FormData()
+          for (const key in this.item) {
+            if (key === 'category' || key === 'station') {
+              formData.append(key + '_id', this.item[key].id)
+            } else {
+              formData.append(key, this.item[key])
+            }
+          }
+          const response = await this.$api.items.update(this.item.id, formData)
           this.snackbar = true
           this.snackbarText = response.data.message
           this.snackbarColor = 'green'
           this.loading = false
+          await this.$refs.form.reset()
+          this.item.location = ''
+          this.$router.push('/items')
         } catch (error) {
           this.snackbar = true
           this.snackbarText = error.response.data.message
@@ -292,23 +401,42 @@ export default {
     },
     rules () {
       return {
+        itemCategory: [
+          v => !!v || this.$t('pleaseSelectCategory')
+        ],
+        itemType: [
+          v => (this.item.category && this.item.category.slug === 'other' && !!v) || this.$t('pleaseSelectType')
+        ],
+        itemCost: [
+          v => (this.item.category && this.item.category.slug === 'money' && !!v) || this.$t('pleaseFillCost')
+        ],
         stationType: [
-          v => !!v || this.$t('stationTypeRequired')
+          v => !!v || this.$t('pleaseSelectStationType')
         ],
-        stationNumber: [
-          v => !!v || this.$t('stationNumberRequired'),
-          v => /^[0-9]*$/.test(v) || this.$t('stationNumberRequired')
+        itemDate: [
+          v => !!v || this.$t('pleaseFillDate')
         ],
-        stationNameEn: [
-          v => !!v || this.$t('stationNameEnRequired'),
-          v => /^[a-zA-Z\s]*$/.test(v) || this.$t('stationNameEnAcceptEnglish')
+        itemTime: [
+          v => !!v || this.$t('pleaseFillTime')
         ],
-        stationNameAr: [
-          v => !!v || this.$t('stationNameArRequired'),
-          v => /^[\u0621-\u064A\s]*$/.test(v) || this.$t('stationNameArAcceptArabic')
+        storage: [
+          v => !!v || this.$t('pleaseFillStorage')
+        ],
+        details: [
+          v => !!v || this.$t('pleaseFillDetails')
         ]
       }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.user-profile-container {
+  max-width: 100%;
+  border: 2px dashed #ABABAB;
+  border-radius: 8px;
+  overflow: hidden;
+  padding:10px;
+
+}
+</style>
