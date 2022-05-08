@@ -103,11 +103,16 @@ export default {
   date: 'وقت و تاريخ',
   location: 'مكان المفقود',
   itemsArchive: 'أرشيف المفقودات',
+  items: 'المفقودات',
+  isDelivered: 'تم التسليم',
+  itemAdded: 'تم إضافة مفقود جديد بنجاح',
   // menu
   menu: {
     home: 'الرئيسية',
     employees: 'الموظفين',
     stations: 'المحطات',
-    settings: 'الاعدادات'
+    settings: 'الاعدادات',
+    items: 'المفقودات'
+
   }
 }

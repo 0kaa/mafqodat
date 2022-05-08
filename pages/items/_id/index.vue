@@ -12,7 +12,7 @@
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.category"
                     :items="categories"
@@ -26,7 +26,7 @@
                     :rules="rules().itemCategory"
                   />
                 </v-col>
-                <v-col v-if="item.category && item.category.slug === 'other'" lg="6">
+                <v-col v-if="item.category && item.category.slug === 'other'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.type"
                     :label="$t('writeItemType')"
@@ -37,7 +37,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col v-if="item.category && item.category.slug === 'money'" lg="6">
+                <v-col v-if="item.category && item.category.slug === 'money'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.cost"
                     :label="$t('lostItemCost')"
@@ -48,7 +48,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.station"
                     :items="stations"
@@ -62,7 +62,7 @@
                     :rules="rules().stationType"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="dialog"
                     v-model="modal"
@@ -105,7 +105,7 @@
                     </v-date-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
                     v-model="modal2"
@@ -137,7 +137,7 @@
                     </v-time-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.storage"
                     :label="$t('storagePlace')"
@@ -148,7 +148,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-textarea
                     v-model="item.details"
                     rows="2"
@@ -159,6 +159,14 @@
                     required
                     color="black"
                     background-color="white"
+                  />
+                </v-col>
+                <v-col lg="12" cols="12" class="pt-0">
+                  <v-checkbox
+                    v-model="item.is_delivered"
+                    class="mt-0"
+                    :label="$t('isDelivered')"
+                    :value="1"
                   />
                 </v-col>
               </v-row>
@@ -199,7 +207,7 @@
           </v-form>
         </div>
       </v-col>
-      <v-col lg="3" cols="12" order="1" order-lg="2">
+      <v-col lg="3" cols="12" order="1" order-lg="2" class="py-0">
         <div class="user-profile-container">
           <v-img
             v-if="!item.image && !imgPreview"
@@ -297,7 +305,8 @@ export default {
       location: '',
       image: '',
       lat: '',
-      lng: ''
+      lng: '',
+      is_delivered: 0
     },
     snackbar: false,
     snackbarText: '',
@@ -383,9 +392,6 @@ export default {
           this.snackbarText = response.data.message
           this.snackbarColor = 'green'
           this.loading = false
-          await this.$refs.form.reset()
-          this.item.location = ''
-          this.$router.push('/items')
         } catch (error) {
           this.snackbar = true
           this.snackbarText = error.response.data.message
@@ -408,7 +414,7 @@ export default {
           v => (this.item.category && this.item.category.slug === 'other' && !!v) || this.$t('pleaseSelectType')
         ],
         itemCost: [
-          v => (this.item.category && this.item.category.slug === 'money' && !!v) || this.$t('pleaseFillCost')
+          v => (this.item.category && this.item.category.slug === 'money' && !!v && v.match(/^[0-9]*\.?[0-9]*$/)) || this.$t('pleaseFillCost')
         ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')

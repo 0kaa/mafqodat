@@ -103,11 +103,15 @@ export default {
   date: 'Date',
   location: 'Location',
   itemsArchive: 'Items archive',
+  items: 'Items',
+  isDelivered: 'Is delivered',
+  itemAdded: 'Item added successfully',
   // menu
   menu: {
     home: 'Home',
     employees: 'Employees',
     stations: 'Stations',
-    settings: 'Settings'
+    settings: 'Settings',
+    items: 'Items'
   }
 }

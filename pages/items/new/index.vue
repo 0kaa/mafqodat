@@ -12,7 +12,7 @@
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.category_id"
                     :items="categories"
@@ -26,7 +26,7 @@
                     :rules="rules().itemCategory"
                   />
                 </v-col>
-                <v-col v-if="item.category_id && item.category_id.slug === 'other'" lg="6">
+                <v-col v-if="item.category_id && item.category_id.slug === 'other'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.type"
                     :label="$t('writeItemType')"
@@ -37,7 +37,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col v-if="item.category_id && item.category_id.slug === 'money'" lg="6">
+                <v-col v-if="item.category_id && item.category_id.slug === 'money'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.cost"
                     :label="$t('lostItemCost')"
@@ -48,7 +48,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.station_id"
                     :items="stations"
@@ -62,7 +62,7 @@
                     :rules="rules().stationType"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="dialog"
                     v-model="modal"
@@ -105,7 +105,7 @@
                     </v-date-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
                     v-model="modal2"
@@ -137,7 +137,7 @@
                     </v-time-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="pt-0">
                   <v-text-field
                     v-model="item.storage"
                     :label="$t('storagePlace')"
@@ -148,7 +148,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="6">
+                <v-col lg="6" cols="12" class="pt-0">
                   <v-textarea
                     v-model="item.details"
                     rows="2"
@@ -234,6 +234,29 @@
         </div>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="dialog"
+      width="720"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          color="red lighten-2"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Click Me
+        </v-btn>
+      </template>
+      <div class="main-dialog">
+        <div>
+          <h3 class="dialog-title">
+            {{ $t('itemAdded') }}
+          </h3>
+          <canvas id="canvas" ref="canvas" class="canvas" />
+        </div>
+      </div>
+    </v-dialog>
     <v-snackbar v-model="snackbar" :timeout="8000" :color="snackbarColor">
       {{ snackbarText }}
       <template #action="{ attrs }">
@@ -251,7 +274,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueMeta from 'vue-meta'
 import { gmapApi } from '~/node_modules/vue2-google-maps'
+
+Vue.use(VueMeta)
 
 export default {
   async asyncData ({ $api }) {
@@ -263,6 +290,9 @@ export default {
     }
   },
   data: () => ({
+    QRCodeModuleLoaded: false,
+    url: '123456',
+    dialog: true,
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu: false,
     modal: false,
@@ -298,6 +328,22 @@ export default {
     snackbarColor: 'red',
     loading: false
   }),
+  head () {
+    return {
+      title: 'QRCode',
+      script: [
+        {
+          hid: 'QRCode',
+          src:
+            'https://jojotoo-static.oss-cn-shanghai.aliyuncs.com/resources/script/qrcode.min.js',
+          defer: true,
+          callback: () => {
+            this.QRCodeModuleLoaded = true
+          }
+        }
+      ]
+    }
+  },
 
   computed: {
     googleM () {
@@ -323,6 +369,19 @@ export default {
     })
   },
   methods: {
+    async getQRCode () {
+      const options = {
+        width: 130,
+        height: 130,
+        errorCorrectionLevel: 'L',
+        type: 'image/png',
+        rendererOpts: {
+          quality: 1
+        }
+      }
+      /* global QRCode */
+      await QRCode.toCanvas(this.$refs.canvas, this.url, options)
+    },
     onButtonClick () {
       this.isSelecting = true
       window.addEventListener('focus', () => { this.isSelecting = false }, { once: true })
@@ -359,7 +418,7 @@ export default {
       this.updateCenter(place.geometry.location)
       this.item.location = place.formatted_address
     },
-    async createItem () {
+    createItem () {
       this.loading = true
       this.valid = this.$refs.form.validate()
       if (this.valid) {
@@ -372,14 +431,18 @@ export default {
               formData.append(key, this.item[key])
             }
           }
-          const response = await this.$api.items.create(formData)
-          this.snackbar = true
-          this.snackbarText = response.data.message
-          this.snackbarColor = 'green'
-          this.loading = false
-          await this.$refs.form.reset()
-          this.item.location = ''
-          this.$router.push('/items')
+          this.$api.items.create(formData).then((response) => {
+            this.snackbar = true
+            this.snackbarText = response.data.message
+            this.snackbarColor = 'green'
+            this.loading = false
+            this.$refs.form.reset()
+            this.item.location = ''
+            this.imgPreview = ''
+            this.url = 'http://127.0.0.1:3000/items/' + response.data.data.id
+            this.dialog = true
+            this.getQRCode()
+          })
         } catch (error) {
           this.snackbar = true
           this.snackbarText = error.response.data.message
@@ -402,7 +465,7 @@ export default {
           v => (this.item.category_id && this.item.category_id.slug === 'other' && !!v) || this.$t('pleaseSelectType')
         ],
         itemCost: [
-          v => (this.item.category_id && this.item.category_id.slug === 'money' && !!v) || this.$t('pleaseFillCost')
+          v => (this.item.category_id && this.item.category_id.slug === 'money' && !!v && v.match(/^[0-9]*\.?[0-9]*$/)) || this.$t('pleaseFillCost')
         ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')
@@ -431,6 +494,13 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   padding:10px;
-
+}
+.main-dialog {
+  background-color:#fff;
+  padding:32px;
+  .dialog-title {
+    font-size: 24px;
+    color:#505050
+  }
 }
 </style>

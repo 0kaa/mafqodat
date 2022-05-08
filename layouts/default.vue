@@ -27,16 +27,27 @@
             v-if="item.new"
             color="primary"
             outlined
-            :to="item.toNew"
             icon
             small
             class="rounded-lg"
-            @click.stop
+            @click.prevent="() => { $router.push(item.toNew)}"
           >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-list-item>
       </v-list>
+      <v-spacer />
+      <div class="px-5">
+        <v-btn
+          v-if="$auth.user.permissions.includes('create_item')"
+          color="primary"
+          class="rounded-lg"
+          :to="localePath('/items/new')"
+          block
+        >
+          {{ $t('addNewItem') }}
+        </v-btn>
+      </div>
     </v-navigation-drawer>
     <v-app-bar fixed app color="white" class="justify-space-between">
       <v-img src="/logo.png" class="logo" />
@@ -77,7 +88,7 @@
                 v-if="$auth.user.image"
                 :src="$auth.user.image"
                 alt="user profile"
-                class="user-profile"
+                class="user-profile-default"
               />
               <v-img
                 v-else
@@ -194,6 +205,12 @@ export default {
           toNew: this.localePath('/stations/new')
         },
         {
+          icon: 'mdi-lock-question',
+          title: this.$t('menu.items'),
+          to: this.localePath('/items'),
+          new: false
+        },
+        {
           icon: 'mdi-note-text',
           title: this.$t('logs'),
           to: this.localePath('/logs'),
@@ -220,7 +237,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .nav-image {
   padding:40px 16px 20px;
   img {
@@ -237,9 +254,15 @@ export default {
   max-width:65px;
   object-fit: cover;
 }
-.user-profile {
+.user-profile-default {
   max-width: 50px;
   object-fit: cover;
+}
+
+.v-navigation-drawer__content {
+  display: flex;
+  flex-direction: column;
+  padding-bottom:40px;
 }
 
 </style>
