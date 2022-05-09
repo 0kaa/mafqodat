@@ -106,6 +106,8 @@ export default {
   items: 'Items',
   isDelivered: 'Is delivered',
   itemAdded: 'Item added successfully',
+  addItemHolderDetails: 'Add item holder details',
+  employeeName: 'Employee name',
   // menu
   menu: {
     home: 'Home',

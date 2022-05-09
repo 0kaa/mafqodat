@@ -65,7 +65,7 @@
                 <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="dialog"
-                    v-model="modal"
+                    v-model="modalDate"
                     :return-value.sync="item.date"
                     persistent
                     width="290px"
@@ -91,7 +91,7 @@
                       <v-btn
                         text
                         color="primary"
-                        @click="modal = false"
+                        @click="modalDate = false"
                       >
                         {{ $t('cancel') }}
                       </v-btn>
@@ -108,7 +108,7 @@
                 <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
-                    v-model="modal2"
+                    v-model="modalTime"
                     :return-value.sync="item.time"
                     persistent
                     width="290px"
@@ -126,9 +126,9 @@
                         v-on="on"
                       />
                     </template>
-                    <v-time-picker v-if="modal2" v-model="item.time" full-width>
+                    <v-time-picker v-if="modalTime" v-model="item.time" full-width>
                       <v-spacer />
-                      <v-btn text color="primary" @click="modal2 = false">
+                      <v-btn text color="primary" @click="modalTime = false">
                         {{ $t('cancel') }}
                       </v-btn>
                       <v-btn text color="primary" @click="$refs.lostTime.save(item.time)">
@@ -238,16 +238,6 @@
       v-model="dialog"
       width="720"
     >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          color="red lighten-2"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Click Me
-        </v-btn>
-      </template>
       <div class="main-dialog">
         <div>
           <h3 class="dialog-title">
@@ -291,14 +281,10 @@ export default {
   },
   data: () => ({
     QRCodeModuleLoaded: false,
-    url: '123456',
-    dialog: true,
-    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-    menu: false,
-    modal: false,
-    menu2: false,
-    time: null,
-    modal2: false,
+    url: '',
+    dialog: false,
+    modalDate: false,
+    modalTime: false,
     mapLatLng: '',
     place: '',
     mapCenter: {
@@ -314,7 +300,7 @@ export default {
       station_id: '',
       type: '',
       cost: '',
-      date: '',
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       time: '',
       details: '',
       storage: '',
@@ -330,7 +316,6 @@ export default {
   }),
   head () {
     return {
-      title: 'QRCode',
       script: [
         {
           hid: 'QRCode',
@@ -441,7 +426,9 @@ export default {
             this.imgPreview = ''
             this.url = 'http://127.0.0.1:3000/items/' + response.data.data.id
             this.dialog = true
-            this.getQRCode()
+            setTimeout(() => {
+              this.getQRCode()
+            }, 100)
           })
         } catch (error) {
           this.snackbar = true

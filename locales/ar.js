@@ -104,8 +104,10 @@ export default {
   location: 'مكان المفقود',
   itemsArchive: 'أرشيف المفقودات',
   items: 'المفقودات',
-  isDelivered: 'تم التسليم',
+  isDelivered: 'تم استلامها',
   itemAdded: 'تم إضافة مفقود جديد بنجاح',
+  addItemHolderDetails: 'إضافة بيانات المفقودات المسلمة',
+  employeeName: 'اسم الموظف',
   // menu
   menu: {
     home: 'الرئيسية',

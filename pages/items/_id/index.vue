@@ -65,7 +65,7 @@
                 <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="dialog"
-                    v-model="modal"
+                    v-model="modalDate"
                     :return-value.sync="item.date"
                     persistent
                     width="290px"
@@ -91,7 +91,7 @@
                       <v-btn
                         text
                         color="primary"
-                        @click="modal = false"
+                        @click="modalDate = false"
                       >
                         {{ $t('cancel') }}
                       </v-btn>
@@ -108,7 +108,7 @@
                 <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
-                    v-model="modal2"
+                    v-model="modalTime"
                     :return-value.sync="item.time"
                     persistent
                     width="290px"
@@ -126,9 +126,9 @@
                         v-on="on"
                       />
                     </template>
-                    <v-time-picker v-if="modal2" v-model="item.time" full-width>
+                    <v-time-picker v-if="modalTime" v-model="item.time" full-width>
                       <v-spacer />
-                      <v-btn text color="primary" @click="modal2 = false">
+                      <v-btn text color="primary" @click="modalTime = false">
                         {{ $t('cancel') }}
                       </v-btn>
                       <v-btn text color="primary" @click="$refs.lostTime.save(item.time)">
@@ -161,16 +161,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="12" cols="12" class="pt-0">
-                  <v-checkbox
-                    v-model="item.is_delivered"
-                    class="mt-0"
-                    :label="$t('isDelivered')"
-                    :value="1"
-                  />
-                </v-col>
               </v-row>
-
               <gmap-autocomplete
                 :value="item.location"
                 class="autocomplete-input"
@@ -190,6 +181,146 @@
                   @click="dragMarker"
                 />
               </google-map>
+              <v-checkbox
+                v-model="item.is_delivered"
+                class="mt-4"
+                :label="$t('isDelivered')"
+                :value="1"
+              />
+              <div v-if="item.is_delivered">
+                <h2 class="holder-title">
+                  {{ $t('addItemHolderDetails') }}
+                </h2>
+                <v-row>
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.first_name"
+                      :label="$t('firstName')"
+                      outlined
+                      required
+                      :rules="rules().first_name"
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.surname"
+                      :label="$t('familyName')"
+                      outlined
+                      required
+                      :rules="rules().family_name"
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.email"
+                      :label="$t('email')"
+                      outlined
+                      required
+                      :rules="rules().email"
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.address"
+                      :label="$t('address')"
+                      outlined
+                      required
+                      :rules="rules().address"
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-select
+                      v-model="item.country"
+                      :items="countries"
+                      outlined
+                      :label="$t('country')"
+                      item-text="name"
+                      item-value="id"
+                      return-object
+                      :rules="rules().country"
+                      background-color="white"
+                      :menu-props="{ bottom: true, offsetY: true }"
+                    />
+                  </v-col>
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-select
+                      v-model="item.city"
+                      :items="cities && cities.length ? cities : []"
+                      outlined
+                      :label="$t('city')"
+                      item-text="name"
+                      item-value="id"
+                      return-object
+                      :disabled="!item.country"
+                      :rules="rules().city"
+                      background-color="white"
+                      :menu-props="{ bottom: true, offsetY: true }"
+                    />
+                  </v-col>
+
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.phone"
+                      :label="$t('phone')"
+                      :rules="rules().phone"
+                      type="text"
+                      name="phone-number"
+                      outlined
+                      required
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.mobile"
+                      :label="$t('mobile')"
+                      :rules="rules().mobile"
+                      type="text"
+                      name="phone-number"
+                      outlined
+                      required
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.post_code"
+                      :label="$t('postCode')"
+                      type="text"
+                      name="post-code"
+                      outlined
+                      required
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+
+                  <v-col lg="6" cols="12" class="py-0">
+                    <v-text-field
+                      v-model="item.user.fullname"
+                      :label="$t('employeeName')"
+                      disabled
+                      outlined
+                      required
+                      color="black"
+                      background-color="white"
+                    />
+                  </v-col>
+                </v-row>
+              </div>
             </v-card-text>
 
             <v-card-actions class="justify-start">
@@ -267,22 +398,21 @@ export default {
       const categories = await $api.categories.all()
       const stations = await $api.stations.all()
       const item = await $api.items.get(params.id)
+      const countires = await $api.countries.getAll()
       return {
         categories: categories.data.data,
         stations: stations.data.data,
-        item: item.data.data
+        item: item.data.data,
+        countries: countires.data.data.data
       }
     } catch (error) {
       return redirect('/items')
     }
   },
   data: () => ({
-    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     menu: false,
-    modal: false,
-    menu2: false,
-    time: null,
-    modal2: false,
+    modalDate: false,
+    modalTime: false,
     mapLatLng: '',
     place: '',
     mapCenter: {
@@ -304,7 +434,10 @@ export default {
       storage: '',
       location: '',
       image: '',
+      user: '',
       lat: '',
+      country: [],
+      city: [],
       lng: '',
       is_delivered: 0
     },
@@ -315,6 +448,9 @@ export default {
   }),
 
   computed: {
+    cities () {
+      return this.item.country ? this.item.country.cities : []
+    },
     googleM () {
       return gmapApi()
     },
@@ -381,11 +517,14 @@ export default {
         try {
           const formData = new FormData()
           for (const key in this.item) {
-            if (key === 'category' || key === 'station') {
+            if (key === 'category' || key === 'station' || key === 'city' || key === 'country') {
               formData.append(key + '_id', this.item[key].id)
             } else {
               formData.append(key, this.item[key])
             }
+          }
+          if (this.item.is_delivered !== 1) {
+            formData.append('is_delivered', 0)
           }
           const response = await this.$api.items.update(this.item.id, formData)
           this.snackbar = true
@@ -430,6 +569,36 @@ export default {
         ],
         details: [
           v => !!v || this.$t('pleaseFillDetails')
+        ],
+        first_name: [
+          v => !!v || this.$t('firstNameRequired'),
+          v => (v && v.length >= 3) || this.$t('firstNameMinLength')
+        ],
+        family_name: [
+          v => !!v || this.$t('familyNameRequired'),
+          v => (v && v.length >= 3) || this.$t('familyNameMinLength')
+        ],
+        email: [
+          v => !!v || this.$t('emailRequired'),
+          v => /.+@.+\..+/.test(v) || this.$t('emailValid')
+        ],
+        address: [
+          v => !!v || this.$t('addressRequired'),
+          v => (v && v.length >= 3) || this.$t('addressMinLength')
+        ],
+        phone: [
+          v => !!v || this.$t('phoneRequired'),
+          v => (v && v.length >= 8) || this.$t('phoneMinLength')
+        ],
+        mobile: [
+          v => !!v || this.$t('mobileRequired'),
+          v => (v && v.length >= 8) || this.$t('mobileMinLength')
+        ],
+        country: [
+          v => !!v || this.$t('countryRequired')
+        ],
+        city: [
+          v => !!v || this.$t('cityRequired')
         ]
       }
     }
@@ -443,6 +612,11 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   padding:10px;
-
+}
+.holder-title {
+  font-size: 24px;
+  font-weight: 300;
+  margin-bottom:44px;
+  color:#505050
 }
 </style>
