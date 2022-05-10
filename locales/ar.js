@@ -108,6 +108,7 @@ export default {
   itemAdded: 'تم إضافة مفقود جديد بنجاح',
   addItemHolderDetails: 'إضافة بيانات المفقودات المسلمة',
   employeeName: 'اسم الموظف',
+  print: 'طباعة',
   // menu
   menu: {
     home: 'الرئيسية',

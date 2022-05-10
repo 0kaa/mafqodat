@@ -199,7 +199,7 @@
           </v-form>
         </div>
       </v-col>
-      <v-col lg="3" cols="12" order="1" order-lg="2">
+      <v-col lg="3" cols="12" order="1" order-lg="2" class="py-0">
         <div class="user-profile-container">
           <v-img
             v-if="!item.image && !imgPreview"
@@ -243,7 +243,46 @@
           <h3 class="dialog-title">
             {{ $t('itemAdded') }}
           </h3>
-          <canvas id="canvas" ref="canvas" class="canvas" />
+          <div ref="qrcode" class="d-flex justify-space-between">
+            <div v-if="dialogItem && Object.keys(dialogItem).length" class="dialog-items">
+              <div class="dialog-item">
+                <span>
+                  {{ $t('category') }}
+                </span>
+                <div class="dialog-item-category">
+                  <h3>{{ dialogItem.category.name }}</h3>
+                  <img :src="dialogItem.category.image">
+                </div>
+              </div>
+
+              <div class="dialog-item">
+                <span>
+                  {{ $t('details') }}
+                </span>
+                <div class="dialog-item-details">
+                  <h3>{{ dialogItem.details }}</h3>
+                </div>
+              </div>
+
+              <div class="dialog-item">
+                <span>
+                  {{ $t('stationName') }}
+                </span>
+                <div class="dialog-item-station">
+                  <h3>{{ dialogItem.station.name }}</h3>
+                </div>
+              </div>
+            </div>
+            <canvas id="canvas" ref="canvas" class="canvas" />
+          </div>
+          <v-btn
+            color="primary"
+            elevation="1"
+            class="px-14 py-6 mt-6 font-weight-light"
+            @click="print()"
+          >
+            {{ $t('print') }}
+          </v-btn>
         </div>
       </div>
     </v-dialog>
@@ -266,8 +305,9 @@
 <script>
 import Vue from 'vue'
 import VueMeta from 'vue-meta'
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
 import { gmapApi } from '~/node_modules/vue2-google-maps'
-
 Vue.use(VueMeta)
 
 export default {
@@ -309,6 +349,7 @@ export default {
       lat: '',
       lng: ''
     },
+    dialogItem: {},
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
@@ -325,6 +366,12 @@ export default {
           callback: () => {
             this.QRCodeModuleLoaded = true
           }
+        },
+        {
+          hid: 'jsPDF',
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+          defer: true
         }
       ]
     }
@@ -354,6 +401,22 @@ export default {
     })
   },
   methods: {
+    print () {
+      const data = this.$refs.qrcode
+      html2canvas(data, {
+        useCORS: true,
+        allowTaint: true
+      }).then((canvas) => {
+        const myImage = canvas.toDataURL('image/jpeg,1.0')
+        const imgWidth = (canvas.width * 60) / 240
+        const imgHeight = (canvas.height * 70) / 240
+        // eslint-disable-next-line new-cap
+        const pdf = new jsPDF('p', 'mm', 'a4')
+        pdf.addImage(myImage, 'png', 15, 2, imgWidth, imgHeight)
+
+        pdf.save('qrcode.pdf')
+      })
+    },
     async getQRCode () {
       const options = {
         width: 130,
@@ -424,7 +487,9 @@ export default {
             this.$refs.form.reset()
             this.item.location = ''
             this.imgPreview = ''
-            this.url = 'http://127.0.0.1:3000/items/' + response.data.data.id
+            this.dialogItem = response.data.data
+            const domain = window.location.protocol + '//' + window.location.host
+            this.url = domain + '/items/' + response.data.data.id
             this.dialog = true
             setTimeout(() => {
               this.getQRCode()
@@ -487,7 +552,39 @@ export default {
   padding:32px;
   .dialog-title {
     font-size: 24px;
+    margin-bottom: 30px;
     color:#505050
+  }
+  .dialog-items {
+    display:flex;
+    flex-direction: column;
+    list-style: none;
+    gap:20px;
+    .dialog-item-category {
+      display:flex;
+      align-items: center;
+      gap:10px;
+      font-size:14px;
+      background: #FFF;
+      padding:15px;
+      border-radius: 8px;
+      border:1px solid #E1E1E1;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+    }
+    h3 {
+      font-weight: 300;
+      color:#363636
+    }
+    .dialog-item {
+        display: flex;
+        align-items: center;
+        gap:15px;
+        span {
+          font-size:22px;
+          font-weight:300;
+          color:#777;
+        }
+    }
   }
 }
 </style>

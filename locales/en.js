@@ -108,6 +108,7 @@ export default {
   itemAdded: 'Item added successfully',
   addItemHolderDetails: 'Add item holder details',
   employeeName: 'Employee name',
+  print: 'Print',
   // menu
   menu: {
     home: 'Home',

@@ -12,7 +12,7 @@
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="station.type"
                     :items="stationTypes"
@@ -26,7 +26,7 @@
                     :rules="rules().stationType"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="station.number"
                     :label="$t('stationNumber')"
@@ -40,7 +40,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="station.name_ar"
                     :label="$t('stationNameAr')"
@@ -52,7 +52,7 @@
                     :rules="rules().stationNameAr"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="station.name_en"
                     :label="$t('stationNameEn')"
@@ -66,7 +66,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-textarea
                     v-model="station.description"
                     :label="$t('stationDescription')"
@@ -105,7 +105,7 @@
                 color="primary"
                 :disabled="!valid"
                 elevation="1"
-                class="px-14 py-6 font-weight-light login-btn"
+                class="px-14 py-6 mt-6 font-weight-light login-btn"
                 :loading="loading"
               >
                 {{ $t('saveData') }}

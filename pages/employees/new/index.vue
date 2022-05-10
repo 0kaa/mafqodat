@@ -24,7 +24,7 @@
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.first_name"
                     :label="$t('firstName')"
@@ -36,7 +36,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.family_name"
                     :label="$t('familyName')"
@@ -50,7 +50,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.address"
                     :label="$t('address')"
@@ -62,7 +62,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.post_code"
                     :label="$t('postCode')"
@@ -75,7 +75,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="employee.country"
                     :items="countries"
@@ -89,7 +89,7 @@
                     :menu-props="{ bottom: true, offsetY: true }"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="employee.city"
                     :items="cities && cities.length ? cities : []"
@@ -106,7 +106,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.phone"
                     :label="$t('phone')"
@@ -119,7 +119,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.mobile"
                     :label="$t('mobile')"
@@ -134,7 +134,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.email"
                     :label="$t('email')"
@@ -146,7 +146,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="employee.password"
                     :label="$t('password')"
@@ -162,7 +162,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="employee.permissions"
                     :items="permissions"

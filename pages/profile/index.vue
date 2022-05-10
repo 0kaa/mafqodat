@@ -24,7 +24,7 @@
           >
             <v-card-text style="padding:0 !important">
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.first_name"
                     :label="$t('firstName')"
@@ -36,7 +36,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.family_name"
                     :label="$t('familyName')"
@@ -50,7 +50,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.address"
                     :label="$t('address')"
@@ -62,7 +62,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.second_address"
                     :label="$t('anotherAddress')"
@@ -75,7 +75,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="user.country"
                     :items="countries"
@@ -89,7 +89,7 @@
                     :menu-props="{ bottom: true, offsetY: true }"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="user.city"
                     :items="user.country.cities"
@@ -105,7 +105,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.phone"
                     :label="$t('phone')"
@@ -116,7 +116,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.mobile"
                     :label="$t('mobile')"
@@ -129,7 +129,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.email"
                     :label="$t('email')"
@@ -140,7 +140,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="user.post_code"
                     :label="$t('postCode')"
@@ -169,7 +169,7 @@
           </v-form>
         </div>
       </v-col>
-      <v-col lg="3" cols="12" order="1" order-lg="2">
+      <v-col lg="3" cols="12" order="1" order-lg="2" class="py-0">
         <div class="user-profile-container">
           <v-img
             v-if="!user.image && !imgPreview"
