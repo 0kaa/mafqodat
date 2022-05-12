@@ -22,6 +22,7 @@
     "js-cookie": "^3.0.1",
     "jspdf": "^2.5.1",
     "nuxt": "^2.15.7",
+    "vue-slick-carousel": "^1.0.6",
     "vue2-google-maps": "0.10.7",
     "vuetify": "^2.5.5"
   },

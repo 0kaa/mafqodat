@@ -136,7 +136,7 @@ import { gmapApi } from '~/node_modules/vue2-google-maps'
 
 export default {
   middleware ({ $auth, redirect }) {
-    if (!$auth.user.permissions.includes('update_station')) {
+    if ($auth.loggedIn && !$auth.user.permissions.includes('update_station')) {
       return redirect('/stations')
     }
   },

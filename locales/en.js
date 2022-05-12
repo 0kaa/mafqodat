@@ -109,6 +109,9 @@ export default {
   addItemHolderDetails: 'Add item holder details',
   employeeName: 'Employee name',
   print: 'Print',
+  mainCategories: 'Main categories for items',
+  viewAll: 'View all',
+  latestItems: 'Latest Items',
   // menu
   menu: {
     home: 'Home',

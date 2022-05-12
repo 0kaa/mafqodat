@@ -28,12 +28,12 @@
         class="elevation-2"
         :no-data-text="$t('noData')"
       >
-        <template v-if="$auth.user.permissions.includes('update_station') || $auth.user.permissions.includes('delete_station')" #[`item.actions`]="{ item }">
+        <template v-if="$auth.loggedIn && ($auth.user.permissions.includes('update_station') || $auth.user.permissions.includes('delete_station'))" #[`item.actions`]="{ item }">
           <div class="d-flex gap-2">
-            <v-btn v-if="$auth.user.permissions.includes('update_station')" :to="localePath(`/stations/${item.id}`)" class="primary--text" elevation="0" small>
+            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('update_station')" :to="localePath(`/stations/${item.id}`)" class="primary--text" elevation="0" small>
               {{ $t('edit') }}
             </v-btn>
-            <v-btn v-if="$auth.user.permissions.includes('delete_station')" class="error--text" elevation="0" small @click="deleteStation(item.id)">
+            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('delete_station')" class="error--text" elevation="0" small @click="deleteStation(item.id)">
               {{ $t('delete') }}
             </v-btn>
           </div>

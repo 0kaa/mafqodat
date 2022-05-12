@@ -225,7 +225,7 @@
 <script>
 export default {
   middleware ({ $auth, redirect }) {
-    if (!$auth.user.permissions.includes('create_employee')) {
+    if ($auth.loggedIn && !$auth.user.permissions.includes('create_employee')) {
       return redirect('/employees')
     }
   },

@@ -7,6 +7,9 @@ export default function items (axios) {
     getAll (page = 1) {
       return axios.get(`items?page=${page}`)
     },
+    latest () {
+      return axios.get('home/items/latest')
+    },
     get (id) {
       return axios.get(`items/show/${id}`)
     },

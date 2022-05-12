@@ -109,6 +109,9 @@ export default {
   addItemHolderDetails: 'إضافة بيانات المفقودات المسلمة',
   employeeName: 'اسم الموظف',
   print: 'طباعة',
+  mainCategories: 'الأقسام الرئيسية للمفقودات',
+  viewAll: 'مشاهدة المزيد',
+  latestItems: 'أحدث المفقودات',
   // menu
   menu: {
     home: 'الرئيسية',
