@@ -113,6 +113,7 @@ export default {
   viewAll: 'View all',
   latestItems: 'Latest Items',
   locations: 'Locations',
+  allCategories: 'All categories',
   // menu
   menu: {
     home: 'Home',

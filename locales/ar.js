@@ -113,6 +113,7 @@ export default {
   viewAll: 'مشاهدة المزيد',
   latestItems: 'أحدث المفقودات',
   locations: 'أماكن و محطات الفقد',
+  allCategories: 'جميع الأقسام',
   // menu
   menu: {
     home: 'الرئيسية',

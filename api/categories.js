@@ -4,6 +4,9 @@ export default function axiosModule (axios) {
     all () {
       return axios.get('categories?all=true')
     },
+    items (id) {
+      return axios.get(`category/${id}/items`)
+    },
     getAll () {
       return axios.get('categories')
     },

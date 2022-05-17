@@ -1,14 +1,14 @@
 <template>
-  <div class="category-item">
+  <nuxt-link :to="localePath(`/category/${category.id}`)" class="category-item">
     <div class="category-item__image">
-      <img :src="category.image" alt="category">
+      <v-img :src="category.image" alt="category" />
     </div>
     <div class="category-item__content">
       <h3 class="category-item__title">
         {{ category.name }}
       </h3>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script>
@@ -28,6 +28,7 @@ export default {
     display: flex;
     flex-direction: column;
     min-width:168px;
+    width:100%;
     border-radius: 8px;
     border:1px solid #E1E1E1;
     gap:30px;
@@ -35,6 +36,9 @@ export default {
     background-color:#fff;
     padding:22px 16px;
     text-decoration: none;
+    &.nuxt-link-active {
+      background-color: #F6931E;
+    }
     .category-item__title {
         color:#505050;
         font-weight:300;

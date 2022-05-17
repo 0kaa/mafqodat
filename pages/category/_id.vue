@@ -1,5 +1,20 @@
 <template>
   <div>
+    <div class="categories-list mb-9">
+      <v-row v-if="categories && categories.length">
+        <v-col
+          v-for="(category ,i) in categories"
+          :key="i"
+          cols="12"
+          lg="2"
+          md="3"
+          sm="4"
+        >
+          <Category :category="category" />
+        </v-col>
+      </v-row>
+    </div>
+
     <div class="d-flex justify-space-between">
       <h2 class="main-title mb-6" v-text="$t('itemsArchive')" />
       <div class="d-flex gap-4 filter-section">
@@ -65,23 +80,40 @@
 </template>
 
 <script>
+
 export default {
-  name: 'ItemsArchive',
+  name: 'Home',
+  async asyncData ({ $api, params, redirect }) {
+    try {
+      const categories = await $api.categories.all()
+      const item = await $api.categories.items(params.id)
+      return {
+        categories: categories.data.data,
+        items: item.data.data.data,
+        meta: item.data.data.meta,
+        links: item.data.data.links
+      }
+    } catch (error) {
+      return redirect('/categories')
+    }
+  },
   data: () => ({
+    snackbar: false,
+    snackbarText: '',
+    snackbarColor: 'red',
+    loading: false,
+    categories: [],
     search: '',
     page: 1,
     meta: {},
     links: {},
-    items: [],
-    valid: true,
-    snackbar: false,
-    snackbarText: '',
-    snackbarColor: 'red',
-    loading: false
+    items: []
   }),
-  async fetch () {
-    await this.getAllItems(this.page)
-  },
+  // async fetch () {
+  //   await this.getAllItems(this.page)
+  //   const categories = await this.$api.categories.all()
+  //   this.categories = categories.data.data
+  // },
   computed: {
     headers () {
       return [
@@ -95,6 +127,7 @@ export default {
       ]
     }
   },
+
   watch: {
     page: {
       handler (page) {
@@ -103,12 +136,11 @@ export default {
       deep: true
     }
   },
-  activated () {
-    if (this.$fetchState.timestamp <= Date.now() - 5000) {
-      this.$fetch()
-    }
-  },
-
+  // activated () {
+  //   if (this.$fetchState.timestamp <= Date.now() - 5000) {
+  //     this.$fetch()
+  //   }
+  // },
   methods: {
     async deleteItem (id) {
       try {
@@ -136,9 +168,9 @@ export default {
     }
 
   }
+
 }
 </script>
-
 <style lang="scss" scoped>
 .filter-section {
     gap:16px;

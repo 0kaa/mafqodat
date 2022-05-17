@@ -14,13 +14,22 @@
     </div>
     <h2 class="main-title mb-6" v-text="$t('mainCategories')" />
     <div class="categories-list">
-      <div class="text-left main-text">
+      <nuxt-link
+        :to="localePath('/categories')"
+        class="main-text d-block"
+        :class="{
+          'text-left': $vuetify.rtl,
+          'text-right': !$vuetify.rtl
+        }"
+      >
         {{ $t('viewAll') }}
-      </div>
+      </nuxt-link>
 
-      <VueSlickCarousel v-if="categories && categories.length" v-bind="settings">
-        <Category v-for="(category ,i) in categories" :key="i" :category="category" />
-      </VueSlickCarousel>
+      <v-row v-if="categoriesList && categoriesList.length">
+        <v-col v-for="(category ,i) in categoriesList" :key="i">
+          <Category :category="category" />
+        </v-col>
+      </v-row>
     </div>
     <v-row>
       <v-col lg="8" cols="12">
@@ -47,30 +56,14 @@
 </template>
 
 <script>
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-// // optional style for arrows & dots
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   name: 'Home',
-  components: { VueSlickCarousel },
   data: () => ({
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
-
     loading: false,
-    settings: {
-      dots: false,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 5,
-      focusOnSelect: true,
-      touchThreshold: 5,
-      rtl: true
-    },
     categories: [],
     items: [],
     locations: []
@@ -84,6 +77,9 @@ export default {
     this.locations = locations.data.data
   },
   computed: {
+    categoriesList () {
+      return this.categories.slice(0, 5)
+    },
     headers () {
       return [
         { text: this.$t('id'), value: 'id' },
@@ -94,9 +90,6 @@ export default {
         { text: this.$t('stationLocation'), value: 'station.location' }
       ]
     }
-  },
-  created () {
-    this.settings.rtl = this.$i18n.locale === 'ar'
   },
   activated () {
     if (this.$fetchState.timestamp <= Date.now() - 5000) {
