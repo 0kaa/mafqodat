@@ -112,6 +112,7 @@ export default {
   mainCategories: 'الأقسام الرئيسية للمفقودات',
   viewAll: 'مشاهدة المزيد',
   latestItems: 'أحدث المفقودات',
+  locations: 'أماكن و محطات الفقد',
   // menu
   menu: {
     home: 'الرئيسية',

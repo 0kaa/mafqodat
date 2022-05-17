@@ -10,6 +10,9 @@ export default function items (axios) {
     latest () {
       return axios.get('home/items/latest')
     },
+    locations () {
+      return axios.get('home/locations')
+    },
     get (id) {
       return axios.get(`items/show/${id}`)
     },

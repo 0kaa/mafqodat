@@ -112,6 +112,7 @@ export default {
   mainCategories: 'Main categories for items',
   viewAll: 'View all',
   latestItems: 'Latest Items',
+  locations: 'Locations',
   // menu
   menu: {
     home: 'Home',

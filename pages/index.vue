@@ -9,7 +9,7 @@
         />
       </v-overlay>
       <p v-if="$fetchState.error">
-        Error while fetching mountains
+        Error while fetching data
       </p>
     </div>
     <h2 class="main-title mb-6" v-text="$t('mainCategories')" />
@@ -30,18 +30,17 @@
         <v-data-table
           :headers="headers"
           :items="items"
-
           hide-default-footer
           :loading="loading"
-          :search="search"
           class="elevation-2"
           :no-data-text="$t('noData')"
         />
       </v-col>
       <v-col lg="4" cols="12">
         <h3 class="text-latest-items">
-          {{ $t('latestItems') }}
+          {{ $t('locations') }}
         </h3>
+        <Locations :locations="locations" />
       </v-col>
     </v-row>
   </div>
@@ -57,7 +56,6 @@ export default {
   name: 'Home',
   components: { VueSlickCarousel },
   data: () => ({
-    search: '',
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
@@ -74,13 +72,16 @@ export default {
       rtl: true
     },
     categories: [],
-    items: []
+    items: [],
+    locations: []
   }),
   async fetch () {
     const categories = await this.$api.categories.all()
     const items = await this.$api.items.latest()
+    const locations = await this.$api.items.locations()
     this.categories = categories.data.data
     this.items = items.data.data
+    this.locations = locations.data.data
   },
   computed: {
     headers () {
