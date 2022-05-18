@@ -1,7 +1,7 @@
 <template>
   <nuxt-link :to="localePath(`/category/${category.id}`)" class="category-item">
     <div class="category-item__image">
-      <v-img :src="category.image" alt="category" />
+      <v-img :src="category.image" alt="category" class="category-image" />
     </div>
     <div class="category-item__content">
       <h3 class="category-item__title">
@@ -38,6 +38,9 @@ export default {
     text-decoration: none;
     &.nuxt-link-active {
       background-color: #F6931E;
+    }
+    .category-item__image .category-image {
+      max-width: 50px;
     }
     .category-item__title {
         color:#505050;

@@ -114,12 +114,19 @@ export default {
   latestItems: 'Latest Items',
   locations: 'Locations',
   allCategories: 'All categories',
+  totalItems: 'Total items',
+  totalItemsDelivered: 'Total items delivered',
+  totalStation: 'Total stations',
+  totalEmployees: 'Total employees',
+  metroStations: 'Metro stations',
+  busStations: 'Bus stations',
   // menu
   menu: {
     home: 'Home',
     employees: 'Employees',
     stations: 'Stations',
     settings: 'Settings',
-    items: 'Items'
+    items: 'Items',
+    reports: 'Reports'
   }
 }

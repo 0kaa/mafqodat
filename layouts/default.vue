@@ -161,7 +161,10 @@
     </v-app-bar>
     <v-main style="background-color:#FBFCFF">
       <v-container fluid class="pt-8 px-8">
-        <Nuxt keep-alive />
+        <Nuxt
+          keep-alive
+          :keep-alive-props="{ exclude: ['Reports'] }"
+        />
       </v-container>
     </v-main>
   </v-app>
@@ -184,6 +187,12 @@ export default {
           icon: 'mdi-home',
           title: this.$t('menu.home'),
           to: this.localePath('/'),
+          new: false
+        },
+        {
+          icon: 'mdi-chart-bar',
+          title: this.$t('menu.reports'),
+          to: this.localePath('/reports'),
           new: false
         },
         {

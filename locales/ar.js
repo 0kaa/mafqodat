@@ -114,13 +114,19 @@ export default {
   latestItems: 'أحدث المفقودات',
   locations: 'أماكن و محطات الفقد',
   allCategories: 'جميع الأقسام',
+  totalItems: 'إجمالي المفقودات',
+  totalItemsDelivered: 'إجمالي المفقودات المسلمة',
+  totalStation: 'إجمالي المحطات',
+  totalEmployees: 'إجمالي الموظفين',
+  metroStations: 'محطات المترو',
+  busStations: 'محطات الباص',
   // menu
   menu: {
     home: 'الرئيسية',
     employees: 'الموظفين',
     stations: 'المحطات',
     settings: 'الاعدادات',
-    items: 'المفقودات'
-
+    items: 'المفقودات',
+    reports: 'التقارير'
   }
 }

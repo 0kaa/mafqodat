@@ -6,6 +6,7 @@ import Cities from '~/api/cities'
 import Employees from '~/api/employees'
 import Stations from '~/api/stations'
 import Items from '~/api/items'
+import Reports from '~/api/reports'
 
 export default (context, inject) => {
   // Initialize API factories
@@ -16,7 +17,8 @@ export default (context, inject) => {
     cities: Cities(context.$axios),
     employees: Employees(context.$axios),
     stations: Stations(context.$axios),
-    items: Items(context.$axios)
+    items: Items(context.$axios),
+    reports: Reports(context.$axios)
   }
 
   // Inject $api
