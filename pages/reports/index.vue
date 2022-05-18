@@ -4,7 +4,7 @@
     <div class="mt-10">
       <v-row>
         <v-col cols="6">
-          <ReportCharts />
+          <ReportCharts :reports="counts" />
         </v-col>
       </v-row>
     </div>
