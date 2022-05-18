@@ -15,5 +15,5 @@ export default function ({ $axios, $storage }, inject) {
   $axios.setHeader('X-Accel-Buffering', 'no')
 
   // Set baseURL to something different
-  $axios.setBaseURL('http://localhost:8000/api/')
+  $axios.setBaseURL('https://mafqudat.jadara.work/api/')
 }
