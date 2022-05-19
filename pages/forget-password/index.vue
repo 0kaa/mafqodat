@@ -3,10 +3,10 @@
     <div class="auth-text d-flex flex-column flex-grow-1">
       <div class="d-flex justify-space-between">
         <nuxt-link :to="localePath('/')">
-          <img src="/logo.png" alt="Logo">
+          <v-img src="/logo.png" class="logo" />
         </nuxt-link>
         <div>
-          <img src="/Saudi_Vision.png" alt="Saudi Vision">
+          <v-img src="/Saudi_Vision.png" class="secound-logo" />
         </div>
       </div>
       <h1 class="text-center login-title font-weight-light">
@@ -306,7 +306,9 @@ export default {
   flex-direction: column;
   padding:0 23px;
   text-align: center;
-
+ @media(max-width:768px) {
+    display:none;
+  }
   .welcome-title {
     font-size:32px;
     font-weight:medium;
@@ -321,10 +323,23 @@ export default {
     line-height: 57px;
   }
 }
+.logo {
+  width:100%;
+  max-width:150px;
+  object-fit: cover;
+}
+.secound-logo {
+  width:100%;
+  max-width:70px;
+  object-fit: cover;
+}
 .auth-text {
   padding:30px 80px;
   gap:60px;
   position: relative;
+   @media(max-width:768px) {
+    padding:10px 15px;
+  }
   .login-title {
     font-size:32px;
     color:#505050;
