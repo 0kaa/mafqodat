@@ -16,11 +16,11 @@ export default function items (axios) {
     get (id) {
       return axios.get(`items/show/${id}`)
     },
-    create (station) {
-      return axios.post('items/create', station)
+    create (item) {
+      return axios.post('items/create', item)
     },
-    update (id, station) {
-      return axios.post(`items/update/${id}`, station)
+    update (id, item) {
+      return axios.post(`items/update/${id}`, item)
     },
     delete (id) {
       return axios.post(`items/delete/${id}`)

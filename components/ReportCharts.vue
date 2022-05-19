@@ -14,8 +14,23 @@ import LineChart from '@/components/Charts/LineChart'
 import * as chartConfigs from '@/components/Charts/config'
 import config from '@/config'
 
-const bigChartData = [[180, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 140]]
-const bigChartLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+const bigChartData = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]]
+const bigChartLabelsEn = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+const bigChartLabelAr = [
+  'يناير',
+  'فبراير',
+  'مارس',
+  'إبريل',
+  'مايو',
+  'يونيو',
+  'يوليو',
+  'أغسطس',
+  'سبتمبر',
+  'أكتوبر',
+  'نوفمبر',
+  'ديسمبر'
+]
+
 const bigChartDatasetOptions = {
   fill: true,
   borderColor: config.colors.primary,
@@ -51,7 +66,7 @@ export default {
             ...bigChartDatasetOptions,
             data: bigChartData[0]
           }],
-          labels: bigChartLabels
+          labels: bigChartLabelsEn
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
@@ -67,20 +82,12 @@ export default {
   methods: {
     initBigChart (index) {
       const chartData = {
-        datasets: [{ ...bigChartDatasetOptions, data: bigChartData[index] }],
-        labels: bigChartLabels
+        datasets: [{ ...bigChartDatasetOptions, data: this.reports }],
+        labels: this.$vuetify.rtl ? bigChartLabelAr : bigChartLabelsEn
       }
       this.$refs.bigChart.updateGradients(chartData)
       this.bigLineChart.chartData = chartData
       this.bigLineChart.activeIndex = index
-      for (let i = 0; i < 12; i++) {
-        // this.bigLineChart.chartData.datasets[0].data[i] = this.reports[index].data[i]
-        if (this.reports[i + 1] && this.reports[i + 1].month === i + 1) {
-          this.bigLineChart.chartData.datasets[0].data[i] = this.reports[i + 1].data
-        } else {
-          this.bigLineChart.chartData.datasets[0].data[i] = 0
-        }
-      }
     }
   }
 }

@@ -32,12 +32,12 @@ export default {
     border-radius: 8px;
     border:1px solid #E1E1E1;
     gap:30px;
-    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 6px 10px rgb(0,0,0,0.06);
     background-color:#fff;
     padding:22px 16px;
     text-decoration: none;
     &.nuxt-link-active {
-      background-color: #F6931E;
+      background-color: rgb(255,231,203,100%);
     }
     .category-item__image .category-image {
       max-width: 50px;

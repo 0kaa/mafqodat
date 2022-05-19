@@ -120,6 +120,16 @@ export default {
   totalEmployees: 'إجمالي الموظفين',
   metroStations: 'محطات المترو',
   busStations: 'محطات الباص',
+  itemsReports: 'احصائيات بالمفقودات',
+  itemsLengthForYear: 'عدد المفقودات لسنة',
+  dailyReports: 'تقرير يومي بالمفقودات',
+  item: 'المفقود',
+  from: 'من',
+  to: 'إلى',
+  fromDateMustBeLessThanToDate: 'تاريخ البداية يجب أن يكون أقل من تاريخ النهاية',
+  toDateMustBeGreaterThanFromDate: 'تاريخ النهاية يجب أن يكون أكبر من تاريخ البداية',
+  clearAll: 'مسح الكل',
+  filter: 'تصفية',
   // menu
   menu: {
     home: 'الرئيسية',

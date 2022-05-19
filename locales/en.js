@@ -120,6 +120,16 @@ export default {
   totalEmployees: 'Total employees',
   metroStations: 'Metro stations',
   busStations: 'Bus stations',
+  itemsReports: 'Item reports',
+  itemsLengthForYear: 'Items length for year',
+  dailyReports: 'Daily reports for items',
+  item: 'Item',
+  from: 'From',
+  to: 'To',
+  fromDateMustBeLessThanToDate: 'From date must be less than to date',
+  toDateMustBeGreaterThanFromDate: 'To date must be greater than from date',
+  clearAll: 'Clear all',
+  filter: 'Filter',
   // menu
   menu: {
     home: 'Home',

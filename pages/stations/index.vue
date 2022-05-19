@@ -4,16 +4,6 @@
       <h2 class="main-title mb-6" v-text="$t('stationsArchive')" />
       <div class="d-flex gap-4 filter-section">
         <input v-model="search" type="text" class="search-input" :placeholder="$t('search')">
-        <v-btn
-          color="primary"
-          depressed
-          :rounded="false"
-          class="pa-0 rounded-lg"
-          min-width="48"
-          min-height="48"
-        >
-          <v-icon>mdi-filter-variant</v-icon>
-        </v-btn>
       </div>
     </div>
     <div>

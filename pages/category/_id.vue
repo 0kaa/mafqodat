@@ -18,7 +18,12 @@
     <div class="d-flex justify-space-between">
       <h2 class="main-title mb-6" v-text="$t('itemsArchive')" />
       <div class="d-flex gap-4 filter-section">
-        <input v-model="search" type="text" class="search-input" :placeholder="$t('search')">
+        <input
+          v-model="search"
+          type="text"
+          class="search-input"
+          :placeholder="$t('search')"
+        >
         <v-btn
           color="primary"
           depressed
@@ -26,9 +31,11 @@
           class="pa-0 rounded-lg"
           min-width="48"
           min-height="48"
+          @click="filterOpen = !filterOpen"
         >
           <v-icon>mdi-filter-variant</v-icon>
         </v-btn>
+        <FilterSearch v-if="filterOpen" :stations="stations" :filter-data="filterData" @filter="filterTable" />
       </div>
     </div>
     <div>
@@ -39,9 +46,9 @@
         :items-per-page="meta.per_page"
         hide-default-footer
         :loading="loading"
-        :search="search"
         class="elevation-2"
         :no-data-text="$t('noData')"
+        :custom-filter="filterTable"
       >
         <template v-if="$auth.loggedIn && ($auth.user.permissions.includes('update_item') || $auth.user.permissions.includes('delete_item'))" #[`item.actions`]="{ item }">
           <div class="d-flex gap-2">
@@ -87,17 +94,22 @@ export default {
     try {
       const categories = await $api.categories.all()
       const item = await $api.categories.items(params.id)
+      const stations = await $api.stations.all()
       return {
         categories: categories.data.data,
         items: item.data.data.data,
+        coreItems: item.data.data.data,
         meta: item.data.data.meta,
-        links: item.data.data.links
+        links: item.data.data.links,
+        stations: stations.data.data
       }
     } catch (error) {
       return redirect('/categories')
     }
   },
   data: () => ({
+    filterData: {},
+    filterOpen: false,
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
@@ -107,13 +119,9 @@ export default {
     page: 1,
     meta: {},
     links: {},
-    items: []
+    items: [],
+    coreItems: []
   }),
-  // async fetch () {
-  //   await this.getAllItems(this.page)
-  //   const categories = await this.$api.categories.all()
-  //   this.categories = categories.data.data
-  // },
   computed: {
     headers () {
       return [
@@ -127,21 +135,44 @@ export default {
       ]
     }
   },
-
   watch: {
     page: {
       handler (page) {
         this.getAllItems(page)
       },
       deep: true
+    },
+    search: {
+      handler (search) {
+        if (search.length > 2) {
+          this.items = this.items.filter((item) => {
+            return item.station.name.toLowerCase().includes(search.toLowerCase())
+          })
+        } else {
+          this.items = this.coreItems
+        }
+      },
+      deep: true
     }
   },
-  // activated () {
-  //   if (this.$fetchState.timestamp <= Date.now() - 5000) {
-  //     this.$fetch()
-  //   }
-  // },
   methods: {
+    filterTable (value) {
+      if (value) {
+        this.filterData = value
+        this.items = this.coreItems.filter((item) => {
+          if (value.station_id && !value.from && !value.to) {
+            return item.station.id === value.station_id.id
+          } else if (value.station_id && value.from && value.to) {
+            return item.station.id === value.station_id.id && item.date >= value.from && item.date <= value.to
+          } else if (!value.station_id && value.from && value.to) {
+            return item.date >= value.from && item.date <= value.to
+          } else {
+            return true
+          }
+        })
+        this.filterOpen = false
+      }
+    },
     async deleteItem (id) {
       try {
         const response = await this.$api.items.delete(id)
@@ -166,15 +197,14 @@ export default {
       this.meta = response.data.data.meta
       this.links = response.data.data.links
     }
-
   }
-
 }
 </script>
 <style lang="scss" scoped>
 .filter-section {
     gap:16px;
     margin-bottom:60px;
+    position: relative;
     .search-input {
         border: 1px solid #F6931E;
         color:#F6931E;

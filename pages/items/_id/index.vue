@@ -517,7 +517,7 @@ export default {
         try {
           const formData = new FormData()
           for (const key in this.item) {
-            if (key === 'category' || key === 'station' || key === 'city' || key === 'country') {
+            if (key === 'category' || key === 'station') {
               formData.append(key + '_id', this.item[key].id)
             } else {
               formData.append(key, this.item[key])
@@ -533,7 +533,8 @@ export default {
           this.loading = false
         } catch (error) {
           this.snackbar = true
-          this.snackbarText = error.response.data.message
+          this.snackbarText = error
+          console.log(error)
           this.snackbarColor = 'red'
           this.loading = false
         }
