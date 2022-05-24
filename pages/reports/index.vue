@@ -30,7 +30,7 @@
               :no-data-text="$t('noData')"
             >
               <template #[`item.actions`]="{ item }">
-                <v-btn class="primary--text" elevation="0" small :to="localePath(`/items/${item.id}`)">
+                <v-btn class="primary--text" elevation="0" small :to="localePath(`/items/show/${item.id}`)">
                   {{ $t('details') }}
                 </v-btn>
               </template>

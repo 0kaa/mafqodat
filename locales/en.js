@@ -130,6 +130,9 @@ export default {
   toDateMustBeGreaterThanFromDate: 'To date must be greater than from date',
   clearAll: 'Clear all',
   filter: 'Filter',
+  editItem: 'Edit item',
+  itemPreview: 'Item preview',
+  show: 'Show',
   // menu
   menu: {
     home: 'Home',

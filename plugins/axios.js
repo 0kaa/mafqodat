@@ -16,4 +16,5 @@ export default function ({ $axios, $storage }, inject) {
 
   // Set baseURL to something different
   $axios.setBaseURL('https://mafqudat.jadara.work/api/')
+  // $axios.setBaseURL('http://127.0.0.1:8000/api/')
 }

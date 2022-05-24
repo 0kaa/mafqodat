@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="main-title mb-6" v-text="$t('addNewItem')" />
+    <h2 class="main-title mb-6" v-text="$t('editItem')" />
     <v-row justify="space-between">
       <v-col lg="9" cols="12" order="2" order-lg="1">
         <div class="inputs">
@@ -162,25 +162,6 @@
                   />
                 </v-col>
               </v-row>
-              <gmap-autocomplete
-                :value="item.location"
-                class="autocomplete-input"
-                :placeholder="$t('stationLocation')"
-                @place_changed="updatePlace"
-              />
-              <google-map
-                :center="mapCenter"
-                :zoom="15"
-                style="width: 100%; height: 400px"
-                @click="setLocation"
-              >
-                <google-maker
-                  :position="mapCenter"
-                  :draggable="true"
-                  @dragend="dragMarker"
-                  @click="dragMarker"
-                />
-              </google-map>
               <v-checkbox
                 v-model="item.is_delivered"
                 class="mt-4"
@@ -240,36 +221,6 @@
                   </v-col>
 
                   <v-col lg="6" cols="12" class="py-0">
-                    <v-select
-                      v-model="item.country"
-                      :items="countries"
-                      outlined
-                      :label="$t('country')"
-                      item-text="name"
-                      item-value="id"
-                      return-object
-                      :rules="rules().country"
-                      background-color="white"
-                      :menu-props="{ bottom: true, offsetY: true }"
-                    />
-                  </v-col>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-select
-                      v-model="item.city"
-                      :items="cities && cities.length ? cities : []"
-                      outlined
-                      :label="$t('city')"
-                      item-text="name"
-                      item-value="id"
-                      return-object
-                      :disabled="!item.country"
-                      :rules="rules().city"
-                      background-color="white"
-                      :menu-props="{ bottom: true, offsetY: true }"
-                    />
-                  </v-col>
-
-                  <v-col lg="6" cols="12" class="py-0">
                     <v-text-field
                       v-model="item.phone"
                       :label="$t('phone')"
@@ -295,19 +246,6 @@
                       background-color="white"
                     />
                   </v-col>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.post_code"
-                      :label="$t('postCode')"
-                      type="text"
-                      name="post-code"
-                      outlined
-                      required
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-
                   <v-col lg="6" cols="12" class="py-0">
                     <v-text-field
                       v-model="item.user.fullname"
@@ -390,9 +328,12 @@
 </template>
 
 <script>
-import { gmapApi } from '~/node_modules/vue2-google-maps'
-
 export default {
+  middleware ({ $auth, redirect }) {
+    if ($auth.loggedIn && !$auth.user.permissions.includes('update_item')) {
+      return redirect('/items')
+    }
+  },
   async asyncData ({ $api, params, redirect }) {
     try {
       const categories = await $api.categories.all()
@@ -451,9 +392,7 @@ export default {
     cities () {
       return this.item.country ? this.item.country.cities : []
     },
-    googleM () {
-      return gmapApi()
-    },
+
     stationTypes () {
       return [
         {
@@ -467,12 +406,7 @@ export default {
       ]
     }
   },
-  mounted () {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.mapCenter.lat = position.coords.latitude
-      this.mapCenter.lng = position.coords.longitude
-    })
-  },
+
   methods: {
     onButtonClick () {
       this.isSelecting = true
@@ -482,33 +416,6 @@ export default {
     onFileChanged (e) {
       this.item.image = e.target.files[0]
       if (this.item.image) { this.imgPreview = URL.createObjectURL(e.target.files[0]) } else { this.imgPreview = '' }
-    },
-    dragMarker (e) {
-      const geocoder = new this.googleM.maps.Geocoder()
-      this.item.lat = e.latLng.lat()
-      this.item.lng = e.latLng.lng()
-      geocoder.geocode(
-        { latLng: { lat: e.latLng.lat(), lng: e.latLng.lng() } },
-        (responses) => { if (responses && responses.length > 0) { this.item.location = responses[0].formatted_address } }
-      )
-    },
-    setLocation (e) {
-      this.mapCenter.lat = e.latLng.lat()
-      this.mapCenter.lng = e.latLng.lng()
-      this.place = e.placeId
-      this.dragMarker(e)
-    },
-    updateCenter (location) {
-      this.mapCenter = {
-        lat: location.lat(),
-        lng: location.lng()
-      }
-      this.item.lat = location.lat()
-      this.item.lng = location.lng()
-    },
-    updatePlace (place) {
-      this.updateCenter(place.geometry.location)
-      this.item.location = place.formatted_address
     },
     async updateItem () {
       this.loading = true
@@ -594,13 +501,8 @@ export default {
         mobile: [
           v => !!v || this.$t('mobileRequired'),
           v => (v && v.length >= 8) || this.$t('mobileMinLength')
-        ],
-        country: [
-          v => !!v || this.$t('countryRequired')
-        ],
-        city: [
-          v => !!v || this.$t('cityRequired')
         ]
+
       }
     }
   }
@@ -608,11 +510,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-profile-container {
-  max-width: 100%;
+  max-height: 100%;
   border: 2px dashed #ABABAB;
   border-radius: 8px;
   overflow: hidden;
-  padding:10px;
+  padding: 10px;
 }
 .holder-title {
   font-size: 24px;

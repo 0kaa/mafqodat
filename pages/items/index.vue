@@ -35,9 +35,12 @@
         class="elevation-2"
         :no-data-text="$t('noData')"
       >
-        <template v-if="$auth.loggedIn && ($auth.user.permissions.includes('update_item') || $auth.user.permissions.includes('delete_item'))" #[`item.actions`]="{ item }">
+        <template v-if="$auth.loggedIn" #[`item.actions`]="{ item }">
           <div class="d-flex gap-2">
-            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('update_item')" :to="localePath(`/items/${item.id}`)" class="primary--text" elevation="0" small>
+            <v-btn :to="localePath(`/items/show/${item.id}`)" elevation="0" small>
+              {{ $t('show') }}
+            </v-btn>
+            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('update_item')" :to="localePath(`/items/edit/${item.id}`)" class="primary--text" elevation="0" small>
               {{ $t('edit') }}
             </v-btn>
             <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('delete_item')" class="error--text" elevation="0" small @click="deleteItem(item.id)">

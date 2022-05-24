@@ -130,6 +130,9 @@ export default {
   toDateMustBeGreaterThanFromDate: 'تاريخ النهاية يجب أن يكون أكبر من تاريخ البداية',
   clearAll: 'مسح الكل',
   filter: 'تصفية',
+  editItem: 'تعديل المفقود',
+  itemPreview: 'معاينة المفقود',
+  show: 'عرض',
   // menu
   menu: {
     home: 'الرئيسية',

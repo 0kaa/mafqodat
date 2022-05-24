@@ -541,12 +541,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-profile-container {
-  max-width: 100%;
+  max-height: 100%;
   border: 2px dashed #ABABAB;
   border-radius: 8px;
   overflow: hidden;
-  padding:10px;
+  padding: 10px;
 }
+
 .main-dialog {
   background-color:#fff;
   padding:32px;
