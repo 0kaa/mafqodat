@@ -5,6 +5,7 @@
       fixed
       :right="availableLocales[0].code !== 'ar'"
       app
+      mobile-breakpoint="991"
     >
       <div class="nav-image">
         <v-img src="/nav-image.png" />
@@ -174,7 +175,7 @@
 export default {
   data () {
     return {
-      drawer: true
+      drawer: false
     }
   },
   computed: {
@@ -268,6 +269,9 @@ export default {
   display: flex;
   flex-direction: column;
   padding-bottom:40px;
+  @media(max-width:992px) {
+    padding-bottom:80px;
+  }
 }
 
 </style>
