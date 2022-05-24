@@ -51,9 +51,9 @@
       </div>
     </v-navigation-drawer>
     <v-app-bar fixed app color="white" class="justify-space-between">
-      <img src="/logo.png" class="logo" />
+      <img src="/logo.png" class="logo">
       <v-spacer />
-      <v-img src="/Saudi_Vision.png" class="saudi-vision" />
+      <img src="/Saudi_Vision.png" class="saudi-vision">
       <v-spacer />
       <div class="d-flex" style="gap:10px">
         <v-btn
