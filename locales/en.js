@@ -150,6 +150,8 @@ export default {
   pdf: 'PDF',
   workingPeriod: 'Working period',
   dateOfHiring: 'Date of hiring',
+  name: 'Name',
+  jobNumber: 'Job number',
   // menu
   menu: {
     home: 'Home',

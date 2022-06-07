@@ -150,6 +150,8 @@ export default {
   pdf: 'تصدير إلى PDF',
   workingPeriod: 'فترة العمل',
   dateOfHiring: 'تاريخ التعيين',
+  name: 'الاسم',
+  jobNumber: 'الرقم الوظيفي',
   // menu
   menu: {
     home: 'الرئيسية',
