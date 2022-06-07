@@ -322,7 +322,8 @@ export default {
   object-fit: cover;
 }
 .secound-logo {
-width:100%;
+  width:100%;
+  filter: brightness(0) invert(1);
   max-width:150px;
   object-fit: cover;
   position: absolute;

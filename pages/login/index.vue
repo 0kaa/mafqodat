@@ -171,6 +171,7 @@ export default {
 .secound-logo {
   width:100%;
   max-width:150px;
+  filter: brightness(0) invert(1);
   object-fit: cover;
   position: absolute;
   top:20px;
