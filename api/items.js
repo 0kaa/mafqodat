@@ -17,13 +17,20 @@ export default function items (axios) {
       return axios.get(`items/show/${id}`)
     },
     create (item) {
-      return axios.post('items/create', item)
+      return axios.post('items/create', item, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
     },
     update (id, item) {
       return axios.post(`items/update/${id}`, item)
     },
     delete (id) {
       return axios.post(`items/delete/${id}`)
+    },
+    deleteMedia (body) {
+      return axios.post('delete_item_image', body)
     }
 
   }

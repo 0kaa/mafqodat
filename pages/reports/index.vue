@@ -65,7 +65,7 @@ export default {
         { text: this.$t('id'), value: 'id' },
         { text: this.$t('item'), value: 'details' },
         { text: this.$t('lostTime'), value: 'time' },
-        { text: this.$t('location'), value: 'location' },
+        { text: this.$t('location'), value: 'station.name' },
         { text: '', value: 'actions', sortable: false }
 
       ]

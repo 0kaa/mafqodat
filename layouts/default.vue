@@ -164,7 +164,7 @@
       <v-container fluid class="pt-8 px-8">
         <Nuxt
           keep-alive
-          :keep-alive-props="{ exclude: ['Reports'] }"
+          :keep-alive-props="{ exclude: ['Reports','EditItem','ShowItem'] }"
         />
       </v-container>
     </v-main>
@@ -196,32 +196,32 @@ export default {
           to: this.localePath('/reports'),
           new: false
         },
-        {
-          icon: 'mdi-account-multiple-plus',
-          title: this.$t('menu.employees'),
-          to: this.localePath('/employees'),
-          new: this.$auth.loggedIn && !!this.$auth.user.permissions.includes('create_employee'),
-          toNew: this.localePath('/employees/new')
-        },
-        {
-          icon: 'mdi-bus-marker',
-          title: this.$t('menu.stations'),
-          to: this.localePath('/stations'),
-          new: this.$auth.loggedIn && !!this.$auth.user.permissions.includes('create_station'),
-          toNew: this.localePath('/stations/new')
-        },
+        // {
+        //   icon: 'mdi-account-multiple-plus',
+        //   title: this.$t('menu.employees'),
+        //   to: this.localePath('/employees'),
+        //   new: this.$auth.loggedIn && !!this.$auth.user.permissions.includes('create_employee'),
+        //   toNew: this.localePath('/employees/new')
+        // },
+        // {
+        //   icon: 'mdi-bus-marker',
+        //   title: this.$t('menu.stations'),
+        //   to: this.localePath('/stations'),
+        //   new: this.$auth.loggedIn && !!this.$auth.user.permissions.includes('create_station'),
+        //   toNew: this.localePath('/stations/new')
+        // },
         {
           icon: 'mdi-lock-question',
           title: this.$t('menu.items'),
           to: this.localePath('/items'),
           new: false
         },
-        {
-          icon: 'mdi-note-text',
-          title: this.$t('logs'),
-          to: this.localePath('/logs'),
-          new: false
-        },
+        // {
+        //   icon: 'mdi-note-text',
+        //   title: this.$t('logs'),
+        //   to: this.localePath('/logs'),
+        //   new: false
+        // }
         {
           icon: 'mdi-cog',
           title: this.$t('menu.settings'),

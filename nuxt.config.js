@@ -40,7 +40,8 @@ export default {
     { src: '~/plugins/api.js' },
     { src: '~/plugins/axios.js' },
     { src: '~/plugins/i18n.js' },
-    { src: '~/plugins/google-maps.js', client: true }
+    { src: '~/plugins/google-maps.js', client: true },
+    { src: '~/plugins/vue-json-excel.js' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -85,8 +86,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://mafqudat.jadara.work/api/'
-    // baseURL: 'http://127.0.0.1:8000/api/'
+    // baseURL: 'https://mafqudat.jadara.work/api/'
+    baseURL: 'http://127.0.0.1:8000/api/'
   },
   auth: {
 
@@ -96,7 +97,8 @@ export default {
           property: 'data.token',
           required: true,
           // global: true,
-          type: 'Bearer'
+          type: 'Bearer',
+          maxAge: 60 * 60 * 24 * 365
         },
         user: {
           property: 'data.user',

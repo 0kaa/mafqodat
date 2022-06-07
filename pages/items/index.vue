@@ -24,6 +24,23 @@
       </div>
     </div>
     <div>
+      <div class="mb-4 d-flex align-center">
+        <DownloadExcel
+          :data="json_data"
+          :fields="json_fields"
+          worksheet="report worksheet"
+          :name="`report_${
+            new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)
+          }.xls`"
+        >
+          <v-btn elevation="0" class="primary--text me-2">
+            {{ $t('excel') }}
+          </v-btn>
+        </DownloadExcel>
+        <!-- <v-btn elevation="0">
+          {{ $t('pdf') }}
+        </v-btn> -->
+      </div>
       <v-data-table
         :headers="headers"
         :items="items"
@@ -47,6 +64,12 @@
               {{ $t('delete') }}
             </v-btn>
           </div>
+        </template>
+        <template #[`item.full_name`]="{ item }">
+          {{ item.full_name ? item.full_name : '-' }}
+        </template>
+        <template #[`item.phone`]="{ item }">
+          {{ item.phone ? item.phone : '-' }}
         </template>
       </v-data-table>
       <div class="text-center pt-8">
@@ -85,17 +108,66 @@ export default {
     meta: {},
     links: {},
     items: [],
+    allItems: [],
     coreItems: [],
     stations: [],
     valid: true,
     snackbar: false,
     snackbarText: '',
     snackbarColor: 'red',
-    loading: false
+    loading: false,
+    json_fields: {},
+    json_data: [],
+    json_meta: [
+      [
+        {
+          key: 'charset',
+          value: 'utf-8'
+        }
+      ]
+    ]
   }),
   async fetch () {
     await this.getAllItems(this.page)
     const stations = await this.$api.stations.all()
+    const allItems = await this.$api.items.all()
+    this.allItems = allItems.data.data
+    this.json_fields = {
+      [this.$t('id')]: 'id',
+      [this.$t('date')]: 'date',
+      [this.$t('category')]: 'category.name',
+      [this.$t('stationName')]: 'station.name',
+      [this.$t('stationNumber')]: 'station.number',
+      [this.$t('stationLocation')]: 'station.location',
+      [this.$t('itemStatus')]: 'item_status',
+      [this.$t('recieveName')]: 'full_name',
+      [this.$t('recievePhone')]: 'phone',
+      [this.$t('deliveryDate')]: 'delivery_date',
+      [this.$t('employeeName')]: 'user.first_name',
+      [this.$t('informerName')]: 'informer_name',
+      [this.$t('informerPhone')]: 'informer_phone'
+    }
+    this.json_data = this.allItems.map((item) => {
+      return {
+        id: item.id,
+        date: item.date,
+        category: {
+          name: item.category.name
+        },
+        station: {
+          name: item.station.name,
+          number: item.station.number,
+          location: item.station.location
+        },
+        item_status: item.item_status,
+        full_name: item.full_name ? item.full_name : '-',
+        phone: item.phone ? item.phone : '-',
+        delivery_date: item.delivery_date ? item.delivery_date : '-',
+        user: { first_name: item.user.first_name },
+        informer_name: item.informer_name ? item.informer_name : '-',
+        informer_phone: item.informer_phone ? item.informer_phone : '-'
+      }
+    })
     this.stations = stations.data.data
   },
   computed: {
@@ -107,6 +179,10 @@ export default {
         { text: this.$t('stationName'), value: 'station.name' },
         { text: this.$t('stationNumber'), value: 'station.number' },
         { text: this.$t('stationLocation'), value: 'station.location' },
+        { text: this.$t('itemStatus'), value: 'item_status' },
+        { text: this.$t('recieveName'), value: 'full_name' },
+        { text: this.$t('recievePhone'), value: 'phone' },
+        { text: this.$t('deliveryDate'), value: 'delivery_date' },
         { text: '', value: 'actions', sortable: false }
       ]
     }

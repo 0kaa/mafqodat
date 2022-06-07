@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2 class="main-title mb-6" v-text="$t('addNewItem')" />
+    <h2 class="main-title mb-6">
+      {{ $route.query.type == 'enquery' ? $t('reportItem') : $t('registerNewItem') }}
+    </h2>
     <v-row justify="space-between">
       <v-col lg="9" cols="12" order="2" order-lg="1">
         <div class="inputs">
@@ -24,42 +26,6 @@
                     background-color="white"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :rules="rules().itemCategory"
-                  />
-                </v-col>
-                <v-col v-if="item.category_id && item.category_id.slug === 'other'" lg="6" cols="12" class="py-0">
-                  <v-text-field
-                    v-model="item.type"
-                    :label="$t('writeItemType')"
-                    :rules="rules().itemType"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                  />
-                </v-col>
-                <v-col v-if="item.category_id && item.category_id.slug === 'money'" lg="6" cols="12" class="py-0">
-                  <v-text-field
-                    v-model="item.cost"
-                    :label="$t('lostItemCost')"
-                    :rules="rules().itemCost"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                  />
-                </v-col>
-                <v-col lg="6" cols="12" class="py-0">
-                  <v-select
-                    v-model="item.station_id"
-                    :items="stations"
-                    outlined
-                    :label="$t('chooseStation')"
-                    item-text="name"
-                    item-value="value"
-                    return-object
-                    background-color="white"
-                    :menu-props="{ bottom: true, offsetY: true }"
-                    :rules="rules().stationType"
                   />
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
@@ -106,6 +72,20 @@
                   </v-dialog>
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
+                  <v-select
+                    v-model="item.storage_id"
+                    :items="storages"
+                    outlined
+                    :disabled="!item.category_id"
+                    :label="$t('chooseStorage')"
+                    item-text="name"
+                    item-value="id"
+                    return-object
+                    background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                  />
+                </v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
                     v-model="modalTime"
@@ -137,18 +117,23 @@
                     </v-time-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6" cols="12" class="pt-0">
-                  <v-text-field
-                    v-model="item.storage"
-                    :label="$t('storagePlace')"
-                    :rules="rules().storage"
+
+                <v-col lg="6" cols="12" class="py-0">
+                  <v-select
+                    v-model="item.station_id"
+                    :items="stations"
                     outlined
-                    required
-                    color="black"
+                    :label="$t('chooseStation')"
+                    item-text="name"
+                    item-value="value"
+                    return-object
                     background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                    :rules="rules().stationType"
                   />
                 </v-col>
-                <v-col lg="6" cols="12" class="pt-0">
+
+                <v-col lg="6" cols="12" class="py-0">
                   <v-textarea
                     v-model="item.details"
                     rows="2"
@@ -161,27 +146,35 @@
                     background-color="white"
                   />
                 </v-col>
+                <v-col lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    :value="item.station_id ? item.station_id.location : ''"
+                    :label="$t('stationLocation')"
+                    outlined
+                    readonly
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col v-if="$route.query.type === 'enquery'" lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    v-model="item.informer_name"
+                    :label="$t('informerName')"
+                    outlined
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col v-if="$route.query.type === 'enquery'" lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    v-model="item.informer_phone"
+                    :label="$t('mobile')"
+                    outlined
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
               </v-row>
-
-              <gmap-autocomplete
-                :value="item.location"
-                class="autocomplete-input"
-                :placeholder="$t('stationLocation')"
-                @place_changed="updatePlace"
-              />
-              <google-map
-                :center="mapCenter"
-                :zoom="15"
-                style="width: 100%; height: 400px"
-                @click="setLocation"
-              >
-                <google-maker
-                  :position="mapCenter"
-                  :draggable="true"
-                  @dragend="dragMarker"
-                  @click="dragMarker"
-                />
-              </google-map>
             </v-card-text>
 
             <v-card-actions class="justify-start">
@@ -199,38 +192,40 @@
           </v-form>
         </div>
       </v-col>
-      <v-col lg="3" cols="12" order="1" order-lg="2" class="py-0">
-        <div class="user-profile-container">
-          <v-img
-            v-if="!item.image && !imgPreview"
-            class="d-flex align-center text-center"
-            src="/item_image.png"
-            @click="onButtonClick"
-          />
-          <v-img
-            v-if="item.image && !imgPreview"
-            :src="item.image"
-            class="user-profile"
-            @click="onButtonClick"
-          />
-          <v-img
-            v-if="imgPreview"
-            :src="imgPreview"
-            class="user-profile"
-            @click="onButtonClick"
-          />
-        </div>
-        <div class="mt-5 d-flex justify-center">
+      <v-col lg="3" cols="12" order="1" order-lg="2" class="pt-0 gap-4 d-flex flex-column flex-wrap">
+        <div class="d-flex justify-center">
           <input
             ref="uploader"
             class="d-none"
             type="file"
+            multiple
             accept="image/png,image/jpg,image/jpeg"
             @change="onFileChanged"
           >
-          <v-btn color="primary" text x-large class="text-capitalize" @click="onButtonClick">
+          <v-btn
+            color="primary"
+            block
+            outlined
+            x-large
+            class="text-capitalize"
+            @click="onButtonClick"
+          >
             {{ $t('uploadImage') }}
           </v-btn>
+        </div>
+        <div v-if="!item.images.length" class="user-profile-container">
+          <v-img
+            class="d-flex align-center text-center"
+            src="/item_image.png"
+            @click="onButtonClick"
+          />
+        </div>
+        <div v-for="(image,index) in imgPreview" :key="index" class="user-profile-container">
+          <v-img
+            :src="image"
+            class="user-profile"
+            @click="onButtonClick"
+          />
         </div>
       </v-col>
     </v-row>
@@ -307,7 +302,6 @@ import Vue from 'vue'
 import VueMeta from 'vue-meta'
 import { jsPDF } from 'jspdf'
 import html2canvas from 'html2canvas'
-import { gmapApi } from '~/node_modules/vue2-google-maps'
 Vue.use(VueMeta)
 
 export default {
@@ -325,29 +319,21 @@ export default {
     dialog: false,
     modalDate: false,
     modalTime: false,
-    mapLatLng: '',
-    place: '',
-    mapCenter: {
-      lat: -8.504455,
-      lng: 115.262349
-    },
     imgPreview: '',
-    google: '',
-    map: '',
     valid: true,
     item: {
       category_id: '',
       station_id: '',
+      storage_id: '',
       type: '',
       cost: '',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       time: '',
       details: '',
-      storage: '',
-      location: '',
-      image: '',
-      lat: '',
-      lng: ''
+      images: '',
+      report_type: '',
+      informer_name: '',
+      informer_phone: ''
     },
     dialogItem: {},
     snackbar: false,
@@ -378,8 +364,8 @@ export default {
   },
 
   computed: {
-    googleM () {
-      return gmapApi()
+    storages () {
+      return [this.item.category_id ? this.item.category_id.storage : {}]
     },
     stationTypes () {
       return [
@@ -393,12 +379,6 @@ export default {
         }
       ]
     }
-  },
-  mounted () {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.mapCenter.lat = position.coords.latitude
-      this.mapCenter.lng = position.coords.longitude
-    })
   },
   methods: {
     print () {
@@ -436,35 +416,19 @@ export default {
       this.$refs.uploader.click()
     },
     onFileChanged (e) {
-      this.item.image = e.target.files[0]
-      if (this.item.image) { this.imgPreview = URL.createObjectURL(e.target.files[0]) } else { this.imgPreview = '' }
-    },
-    dragMarker (e) {
-      const geocoder = new this.googleM.maps.Geocoder()
-      this.item.lat = e.latLng.lat()
-      this.item.lng = e.latLng.lng()
-      geocoder.geocode(
-        { latLng: { lat: e.latLng.lat(), lng: e.latLng.lng() } },
-        (responses) => { if (responses && responses.length > 0) { this.item.location = responses[0].formatted_address } }
-      )
-    },
-    setLocation (e) {
-      this.mapCenter.lat = e.latLng.lat()
-      this.mapCenter.lng = e.latLng.lng()
-      this.place = e.placeId
-      this.dragMarker(e)
-    },
-    updateCenter (location) {
-      this.mapCenter = {
-        lat: location.lat(),
-        lng: location.lng()
+      if (e.target.files) {
+        // convert to array
+        const files = Array.from(e.target.files)
+        const imgPreviews = []
+        files.forEach((image) => {
+          imgPreviews.push(URL.createObjectURL(image))
+        })
+
+        this.imgPreview = imgPreviews
+        this.item.images = files
+      } else {
+        this.imgPreview = ''
       }
-      this.item.lat = location.lat()
-      this.item.lng = location.lng()
-    },
-    updatePlace (place) {
-      this.updateCenter(place.geometry.location)
-      this.item.location = place.formatted_address
     },
     createItem () {
       this.loading = true
@@ -472,12 +436,18 @@ export default {
       if (this.valid) {
         try {
           const formData = new FormData()
+          this.item.report_type = this.$route.query.type === 'enquery' ? 'found' : 'lost'
           for (const key in this.item) {
-            if (key === 'category_id' || key === 'station_id') {
+            if (key === 'category_id' || key === 'station_id' || key === 'storage_id') {
               formData.append(key, this.item[key].id)
-            } else {
-              formData.append(key, this.item[key])
-            }
+            } else if (key !== 'images') { formData.append(key, this.item[key]) }
+          }
+
+          // delete item images from formData
+          if (this.item.images) {
+            this.item.images.forEach((image) => {
+              formData.append('images[]', image)
+            })
           }
           this.$api.items.create(formData).then((response) => {
             this.snackbar = true
@@ -485,7 +455,7 @@ export default {
             this.snackbarColor = 'green'
             this.loading = false
             this.$refs.form.reset()
-            this.item.location = ''
+            this.item.images = []
             this.imgPreview = ''
             this.dialogItem = response.data.data
             const domain = window.location.protocol + '//' + window.location.host
@@ -513,12 +483,6 @@ export default {
         itemCategory: [
           v => !!v || this.$t('pleaseSelectCategory')
         ],
-        itemType: [
-          v => (this.item.category_id && this.item.category_id.slug === 'other' && !!v) || this.$t('pleaseSelectType')
-        ],
-        itemCost: [
-          v => (this.item.category_id && this.item.category_id.slug === 'money' && !!v && v.match(/^[0-9]*\.?[0-9]*$/)) || this.$t('pleaseFillCost')
-        ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')
         ],
@@ -541,11 +505,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-profile-container {
-  max-height: 100%;
-  border: 2px dashed #ABABAB;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 10px;
+    border: 2px dashed #ABABAB;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
+    max-height: 250px;
+    display: flex;
+    justify-content: center;
 }
 
 .main-dialog {

@@ -26,42 +26,6 @@
                     :rules="rules().itemCategory"
                   />
                 </v-col>
-                <v-col v-if="item.category && item.category.slug === 'other'" lg="6" cols="12" class="py-0">
-                  <v-text-field
-                    v-model="item.type"
-                    :label="$t('writeItemType')"
-                    :rules="rules().itemType"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                  />
-                </v-col>
-                <v-col v-if="item.category && item.category.slug === 'money'" lg="6" cols="12" class="py-0">
-                  <v-text-field
-                    v-model="item.cost"
-                    :label="$t('lostItemCost')"
-                    :rules="rules().itemCost"
-                    outlined
-                    required
-                    color="black"
-                    background-color="white"
-                  />
-                </v-col>
-                <v-col lg="6" cols="12" class="py-0">
-                  <v-select
-                    v-model="item.station"
-                    :items="stations"
-                    outlined
-                    :label="$t('chooseStation')"
-                    item-text="name"
-                    item-value="value"
-                    return-object
-                    background-color="white"
-                    :menu-props="{ bottom: true, offsetY: true }"
-                    :rules="rules().stationType"
-                  />
-                </v-col>
                 <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="dialog"
@@ -106,6 +70,20 @@
                   </v-dialog>
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
+                  <v-select
+                    v-model="item.storage"
+                    :items="storages"
+                    outlined
+                    :disabled="!item.category"
+                    :label="$t('chooseStorage')"
+                    item-text="name"
+                    item-value="id"
+                    return-object
+                    background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                  />
+                </v-col>
+                <v-col lg="6" cols="12" class="py-0">
                   <v-dialog
                     ref="lostTime"
                     v-model="modalTime"
@@ -138,14 +116,17 @@
                   </v-dialog>
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
-                  <v-text-field
-                    v-model="item.storage"
-                    :label="$t('storagePlace')"
-                    :rules="rules().storage"
+                  <v-select
+                    v-model="item.station"
+                    :items="stations"
                     outlined
-                    required
-                    color="black"
+                    :label="$t('chooseStation')"
+                    item-text="name"
+                    item-value="value"
+                    return-object
                     background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                    :rules="rules().stationType"
                   />
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
@@ -161,106 +142,74 @@
                     background-color="white"
                   />
                 </v-col>
+                <v-col lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    :value="item.station ? item.station.location : ''"
+                    :label="$t('stationLocation')"
+                    outlined
+                    readonly
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col v-if="item.report_type === 'found'" lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    v-model="item.informer_name"
+                    :label="$t('informerName')"
+                    outlined
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col v-if="item.report_type === 'found'" lg="6" cols="12" class="py-0">
+                  <v-text-field
+                    v-model="item.informer_phone"
+                    :label="$t('mobile')"
+                    outlined
+                    color="black"
+                    background-color="white"
+                  />
+                </v-col>
+                <v-col lg="12" cols="12" class="py-0">
+                  <v-checkbox
+                    v-model="item.is_delivered"
+                    class="mt-0"
+                    :label="$t('isDelivered')"
+                    :value="1"
+                  />
+                  <div v-if="item.is_delivered">
+                    <h2 class="holder-title">
+                      {{ $t('addItemHolderDetails') }}
+                    </h2>
+                    <v-row>
+                      <v-col lg="6" cols="12" class="py-0">
+                        <v-text-field
+                          v-model="item.full_name"
+                          :label="$t('recieveName')"
+                          outlined
+                          required
+                          :rules="rules().full_name"
+                          color="black"
+                          background-color="white"
+                        />
+                      </v-col>
+                      <v-col lg="6" cols="12" class="py-0">
+                        <v-text-field
+                          v-model="item.phone"
+                          :label="$t('recievePhone')"
+                          type="text"
+                          name="phone-number"
+                          outlined
+                          required
+                          color="black"
+                          background-color="white"
+                        />
+                      </v-col>
+                    </v-row>
+                  </div>
+                </v-col>
               </v-row>
-              <v-checkbox
-                v-model="item.is_delivered"
-                class="mt-4"
-                :label="$t('isDelivered')"
-                :value="1"
-              />
-              <div v-if="item.is_delivered">
-                <h2 class="holder-title">
-                  {{ $t('addItemHolderDetails') }}
-                </h2>
-                <v-row>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.first_name"
-                      :label="$t('firstName')"
-                      outlined
-                      required
-                      :rules="rules().first_name"
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.surname"
-                      :label="$t('familyName')"
-                      outlined
-                      required
-                      :rules="rules().family_name"
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.email"
-                      :label="$t('email')"
-                      outlined
-                      required
-                      :rules="rules().email"
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.address"
-                      :label="$t('address')"
-                      outlined
-                      required
-                      :rules="rules().address"
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.phone"
-                      :label="$t('phone')"
-                      :rules="rules().phone"
-                      type="text"
-                      name="phone-number"
-                      outlined
-                      required
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.mobile"
-                      :label="$t('mobile')"
-                      :rules="rules().mobile"
-                      type="text"
-                      name="phone-number"
-                      outlined
-                      required
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-                  <v-col lg="6" cols="12" class="py-0">
-                    <v-text-field
-                      v-model="item.user.fullname"
-                      :label="$t('employeeName')"
-                      disabled
-                      outlined
-                      required
-                      color="black"
-                      background-color="white"
-                    />
-                  </v-col>
-                </v-row>
-              </div>
             </v-card-text>
-
             <v-card-actions class="justify-start">
               <v-btn
                 type="submit"
@@ -276,38 +225,53 @@
           </v-form>
         </div>
       </v-col>
-      <v-col lg="3" cols="12" order="1" order-lg="2" class="py-0">
-        <div class="user-profile-container">
-          <v-img
-            v-if="!item.image && !imgPreview"
-            class="d-flex align-center text-center"
-            src="/item_image.png"
-            @click="onButtonClick"
-          />
-          <v-img
-            v-if="item.image && !imgPreview"
-            :src="item.image"
-            class="user-profile"
-            @click="onButtonClick"
-          />
-          <v-img
-            v-if="imgPreview"
-            :src="imgPreview"
-            class="user-profile"
-            @click="onButtonClick"
-          />
-        </div>
-        <div class="mt-5 d-flex justify-center">
+      <v-col lg="3" cols="12" order="1" order-lg="2" class="pt-0 gap-4 d-flex flex-column flex-wrap">
+        <div class="d-flex justify-center">
           <input
             ref="uploader"
             class="d-none"
             type="file"
+            multiple
             accept="image/png,image/jpg,image/jpeg"
             @change="onFileChanged"
           >
-          <v-btn color="primary" text x-large class="text-capitalize" @click="onButtonClick">
+          <v-btn
+            color="primary"
+            block
+            outlined
+            x-large
+            class="text-capitalize"
+            @click="onButtonClick"
+          >
             {{ $t('uploadImage') }}
           </v-btn>
+        </div>
+        <div v-if="!item.media.length && !imgPreview" class="user-profile-container">
+          <v-img
+            class="d-flex align-center text-center"
+            src="/item_image.png"
+            @click="onButtonClick"
+          />
+        </div>
+        <div v-if="item.media" class="w-100 d-flex flex-column gap-4 flex-wrap">
+          <div v-for="(image,index) in item.media" :key="index" class="user-profile-container">
+            <v-img
+              :src="image.image"
+              class="user-profile"
+            />
+            <div class="img-overlay" @click="deleteMedia(image)">
+              <v-btn color="error" elevation="0">
+                {{ $t('delete_image') }}
+              </v-btn>
+            </div>
+          </div>
+        </div>
+        <div v-for="(image,index) in imgPreview" :key="index" class="user-profile-container">
+          <v-img
+            :src="image"
+            class="user-profile"
+            @click="onButtonClick"
+          />
         </div>
       </v-col>
     </v-row>
@@ -329,6 +293,7 @@
 
 <script>
 export default {
+  name: 'EditItem',
   middleware ({ $auth, redirect }) {
     if ($auth.loggedIn && !$auth.user.permissions.includes('update_item')) {
       return redirect('/items')
@@ -339,12 +304,10 @@ export default {
       const categories = await $api.categories.all()
       const stations = await $api.stations.all()
       const item = await $api.items.get(params.id)
-      const countires = await $api.countries.getAll()
       return {
         categories: categories.data.data,
         stations: stations.data.data,
-        item: item.data.data,
-        countries: countires.data.data.data
+        item: item.data.data
       }
     } catch (error) {
       return redirect('/items')
@@ -354,33 +317,22 @@ export default {
     menu: false,
     modalDate: false,
     modalTime: false,
-    mapLatLng: '',
-    place: '',
-    mapCenter: {
-      lat: -8.504455,
-      lng: 115.262349
-    },
     imgPreview: '',
-    google: '',
-    map: '',
     valid: true,
     item: {
       category: '',
       station: '',
-      type: '',
-      cost: '',
       date: '',
       time: '',
       details: '',
       storage: '',
-      location: '',
-      image: '',
-      user: '',
-      lat: '',
-      country: [],
-      city: [],
-      lng: '',
-      is_delivered: 0
+      images: '',
+      informer_name: '',
+      informer_phone: '',
+      report_type: '',
+      full_name: '',
+      is_delivered: 0,
+      user: ''
     },
     snackbar: false,
     snackbarText: '',
@@ -392,7 +344,9 @@ export default {
     cities () {
       return this.item.country ? this.item.country.cities : []
     },
-
+    storages () {
+      return [this.item.category ? this.item.category.storage : {}]
+    },
     stationTypes () {
       return [
         {
@@ -408,14 +362,35 @@ export default {
   },
 
   methods: {
+    deleteMedia (media) {
+      this.$api.items.deleteMedia({
+        image_id: media.id
+      }).then(() => {
+        this.item.media = this.item.media.filter(image => image.id !== media.id)
+        this.snackbar = true
+        this.snackbarText = this.$t('image_deleted')
+        this.snackbarColor = 'green'
+      })
+    },
     onButtonClick () {
       this.isSelecting = true
       window.addEventListener('focus', () => { this.isSelecting = false }, { once: true })
       this.$refs.uploader.click()
     },
     onFileChanged (e) {
-      this.item.image = e.target.files[0]
-      if (this.item.image) { this.imgPreview = URL.createObjectURL(e.target.files[0]) } else { this.imgPreview = '' }
+      if (e.target.files) {
+        // convert to array
+        const files = Array.from(e.target.files)
+        const imgPreviews = []
+        files.forEach((image) => {
+          imgPreviews.push(URL.createObjectURL(image))
+        })
+
+        this.imgPreview = imgPreviews
+        this.item.images = files
+      } else {
+        this.imgPreview = ''
+      }
     },
     async updateItem () {
       this.loading = true
@@ -424,11 +399,14 @@ export default {
         try {
           const formData = new FormData()
           for (const key in this.item) {
-            if (key === 'category' || key === 'station') {
+            if (key === 'category' || key === 'station' || key === 'storage') {
               formData.append(key + '_id', this.item[key].id)
-            } else {
-              formData.append(key, this.item[key])
-            }
+            } else if (key !== 'images') { formData.append(key, this.item[key]) }
+          }
+          if (this.item.images) {
+            this.item.images.forEach((image) => {
+              formData.append('images[]', image)
+            })
           }
           if (this.item.is_delivered !== 1) {
             formData.append('is_delivered', 0)
@@ -441,7 +419,6 @@ export default {
         } catch (error) {
           this.snackbar = true
           this.snackbarText = error
-          console.log(error)
           this.snackbarColor = 'red'
           this.loading = false
         }
@@ -457,12 +434,6 @@ export default {
         itemCategory: [
           v => !!v || this.$t('pleaseSelectCategory')
         ],
-        itemType: [
-          v => (this.item.category && this.item.category.slug === 'other' && !!v) || this.$t('pleaseSelectType')
-        ],
-        itemCost: [
-          v => (this.item.category && this.item.category.slug === 'money' && !!v && v.match(/^[0-9]*\.?[0-9]*$/)) || this.$t('pleaseFillCost')
-        ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')
         ],
@@ -477,32 +448,7 @@ export default {
         ],
         details: [
           v => !!v || this.$t('pleaseFillDetails')
-        ],
-        first_name: [
-          v => !!v || this.$t('firstNameRequired'),
-          v => (v && v.length >= 3) || this.$t('firstNameMinLength')
-        ],
-        family_name: [
-          v => !!v || this.$t('familyNameRequired'),
-          v => (v && v.length >= 3) || this.$t('familyNameMinLength')
-        ],
-        email: [
-          v => !!v || this.$t('emailRequired'),
-          v => /.+@.+\..+/.test(v) || this.$t('emailValid')
-        ],
-        address: [
-          v => !!v || this.$t('addressRequired'),
-          v => (v && v.length >= 3) || this.$t('addressMinLength')
-        ],
-        phone: [
-          v => !!v || this.$t('phoneRequired'),
-          v => (v && v.length >= 8) || this.$t('phoneMinLength')
-        ],
-        mobile: [
-          v => !!v || this.$t('mobileRequired'),
-          v => (v && v.length >= 8) || this.$t('mobileMinLength')
         ]
-
       }
     }
   }
@@ -510,11 +456,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-profile-container {
-  max-height: 100%;
-  border: 2px dashed #ABABAB;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 10px;
+    border: 2px dashed #ABABAB;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
+    max-height: 250px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    &:hover {
+      .img-overlay {
+        opacity:1;
+      }
+    }
 }
 .holder-title {
   font-size: 24px;
@@ -522,4 +477,20 @@ export default {
   margin-bottom:44px;
   color:#505050
 }
+.img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding:10px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity:0;
+  transition: all .3s ease-in-out;
+}
+
 </style>

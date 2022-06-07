@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex justify-space-between">
+  <div class="d-flex justify-space-between align-center">
+    <div class="text-center">
+      <v-img src="/2030.png" class="secound-logo" />
+    </div>
     <div class="auth-text d-flex flex-column flex-grow-1">
-      <div class="d-flex justify-space-between">
+      <div class="d-flex justify-center w-100">
         <nuxt-link :to="localePath('/')">
-          <v-img src="/logo.png" class="logo" />
+          <v-img src="/landing_logo.png" class="logo" />
         </nuxt-link>
-        <div>
-          <v-img src="/Saudi_Vision.png" class="secound-logo" />
-        </div>
       </div>
       <h1 class="text-center login-title font-weight-light">
         {{ $t('login') }}
@@ -80,14 +80,7 @@
       </div>
       <div class="wave" />
     </div>
-    <div class="bg-screen">
-      <h2 class="welcome-title">
-        {{ $t('welcomeTitle') }}
-      </h2>
-      <p class="welcome-description">
-        {{ $t('welcomeDescription') }}
-      </p>
-    </div>
+    <div class="bg-screen" />
   </div>
 </template>
 
@@ -146,7 +139,7 @@ export default {
   background: url('/auth-screen.jpg') no-repeat center center;
   background-size: cover;
   min-height: 100vh;
-  width: 644px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,21 +165,33 @@ export default {
 }
 .logo {
   width:100%;
-  max-width:150px;
+  max-width:100px;
   object-fit: cover;
 }
 .secound-logo {
   width:100%;
-  max-width:70px;
+  max-width:150px;
   object-fit: cover;
+  position: absolute;
+  top:20px;
+  left:20px;
 }
 .auth-text {
-  padding:30px 80px;
-  gap:60px;
+    padding: 30px 80px;
+    grid-gap: 60px;
+    gap: 60px;
+    position: absolute;
+    background: white;
+    overflow: hidden;
+    border-radius: 10px;
+    right: 0;
+    left: 0;
+    max-width: 600px;
+    margin: auto;
   @media(max-width:768px) {
     padding:10px 15px;
+    position: relative;
   }
-  position: relative;
   .login-title {
     font-size:32px;
     color:#505050;
