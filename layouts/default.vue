@@ -8,7 +8,7 @@
       mobile-breakpoint="991"
     >
       <div class="nav-image">
-        <v-img src="/nav-image.png" />
+        <img src="/dashboard_layout_image.png">
       </div>
       <v-list>
         <v-list-item
@@ -247,7 +247,10 @@ export default {
 .nav-image {
   padding:40px 16px 20px;
   img {
-    width:100%;
+    width: 100%;
+    border-radius: 8px;
+    height: 180px;
+    object-fit: cover;
   }
 }
 .logo {
