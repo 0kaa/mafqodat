@@ -18,6 +18,9 @@ export default function axiosModule (axios) {
     },
     logs (page = 1) {
       return axios.get(`logs?page=${page}`)
+    },
+    allLogs () {
+      return axios.get('logs?all=true')
     }
   }
 }

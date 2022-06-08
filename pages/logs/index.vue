@@ -1,20 +1,41 @@
 <template>
   <div>
     <h2 class="main-title mb-6" v-text="$t('logs')" />
-    <div class="logs-container">
-      <Log v-for="(log,i) in logs" :key="i" :log="log" />
-    </div>
-    <div class="text-center">
-      <v-btn
-        v-if="meta.current_page < meta.last_page"
-        color="primary"
-        class="my-4"
-        elevation="0"
+    <div class="">
+      <div class="mb-4 d-flex align-center">
+        <DownloadExcel
+          :data="json_data"
+          :fields="json_fields"
+          worksheet="logs worksheet"
+          :name="`logs_${$auth.user.name}.xls`"
+        >
+          <v-btn elevation="0" class="primary--text me-2">
+            {{ $t('excel') }}
+          </v-btn>
+        </DownloadExcel>
+        <!-- <v-btn elevation="0">
+          {{ $t('pdf') }}
+        </v-btn> -->
+      </div>
+      <v-data-table
+        :headers="headers"
+        :items="logs"
+        :page.sync="page"
+        :items-per-page="meta.per_page"
+        hide-default-footer
         :loading="loading"
-        @click="getMoreLogs(page)"
-      >
-        {{ $t('loadMore') }}
-      </v-btn>
+        class="elevation-2"
+        :no-data-text="$t('noData')"
+        @click:row="onClickRow"
+      />
+    </div>
+
+    <div class="text-center pt-8">
+      <v-pagination
+        v-if="meta.last_page > 1"
+        v-model="page"
+        :length="meta.last_page"
+      />
     </div>
   </div>
 </template>
@@ -24,27 +45,76 @@ export default {
   name: 'Logs',
   async asyncData ({ $api }) {
     const logs = await $api.auth.logs(1)
+    const allLogs = await $api.auth.allLogs()
     return {
       logs: logs.data.data.data,
+      allLogs: allLogs.data.data,
       meta: logs.data.data.meta,
       links: logs.data.data.links
     }
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      page: 1,
+      allLogs: [],
+      json_fields: {},
+      json_data: [],
+      json_meta: [
+        [
+          {
+            key: 'charset',
+            value: 'utf-8'
+          }
+        ]
+      ]
     }
   },
-  methods: {
-    async getMoreLogs () {
-      if (this.meta.current_page < this.meta.last_page) {
-        this.loading = true
-        const logs = await this.$api.auth.logs(this.meta.current_page + 1)
-        this.logs = this.logs = [...this.logs, ...logs.data.data.data]
-        this.meta = logs.data.data.meta
-        this.links = logs.data.data.links
-        this.loading = false
+  computed: {
+    headers () {
+      return [
+        { text: this.$t('itemId'), value: 'item_id' },
+        { text: this.$t('event'), value: 'message' },
+        { text: this.$t('time'), value: 'time' },
+        { text: this.$t('theDate'), value: 'date' }
+      ]
+    }
+  },
+  watch: {
+    page: {
+      handler (page) {
+        this.getMoreLogs(page)
+      },
+      deep: true
+    }
+  },
+  mounted () {
+    this.json_fields = {
+      [this.$t('itemId')]: 'item_id',
+      [this.$t('event')]: 'message',
+      [this.$t('time')]: 'time',
+      [this.$t('date')]: 'date'
+    }
+    this.json_data = this.allLogs.map((log) => {
+      return {
+        item_id: log.item_id,
+        message: log.message,
+        time: log.time,
+        date: log.date
       }
+    })
+  },
+  methods: {
+    onClickRow (v) {
+      this.$router.push(`/items/show/${v.item_id}`)
+    },
+    async getMoreLogs (page) {
+      this.loading = true
+      const logs = await this.$api.auth.logs(page)
+      this.logs = logs.data.data.data
+      this.meta = logs.data.data.meta
+      this.links = logs.data.data.links
+      this.loading = false
     }
   }
 }

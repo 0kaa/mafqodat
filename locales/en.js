@@ -157,6 +157,10 @@ export default {
   pleaseFillFullName: 'Please fill full name',
   pleaseFillPhone: 'Please fill phone',
   pleaseSelectStorage: 'Please select storage',
+  itemId: 'Item ID',
+  event: 'Event',
+  time: 'Time',
+  theDate: 'Date',
   // menu
   menu: {
     home: 'Home',

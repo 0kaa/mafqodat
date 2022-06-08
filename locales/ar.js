@@ -157,6 +157,10 @@ export default {
   pleaseFillFullName: 'يرجى ملء الاسم الكامل',
   pleaseFillPhone: 'يرجى ملء رقم الهاتف',
   pleaseSelectStorage: 'يرجى اختيار مكان التخزين',
+  itemId: 'رقم المفقود',
+  event: 'الحدث',
+  time: 'الوقت',
+  theDate: 'التاريخ',
   // menu
   menu: {
     home: 'الرئيسية',
