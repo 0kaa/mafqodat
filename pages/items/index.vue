@@ -139,6 +139,7 @@ export default {
       [this.$t('stationName')]: 'station.name',
       [this.$t('stationNumber')]: 'station.number',
       [this.$t('stationLocation')]: 'station.location',
+      [this.$t('chooseStorage')]: 'storage.name',
       [this.$t('itemStatus')]: 'item_status',
       [this.$t('recieveName')]: 'full_name',
       [this.$t('recievePhone')]: 'phone',
@@ -158,6 +159,9 @@ export default {
           name: item.station.name,
           number: item.station.number,
           location: item.station.location
+        },
+        storage: {
+          name: item.storage.name
         },
         item_status: item.item_status,
         full_name: item.full_name ? item.full_name : '-',
@@ -179,6 +183,7 @@ export default {
         { text: this.$t('stationName'), value: 'station.name' },
         { text: this.$t('stationNumber'), value: 'station.number' },
         { text: this.$t('stationLocation'), value: 'station.location' },
+        { text: this.$t('chooseStorage'), value: 'storage.name' },
         { text: this.$t('itemStatus'), value: 'item_status' },
         { text: this.$t('recieveName'), value: 'full_name' },
         { text: this.$t('recievePhone'), value: 'phone' },
@@ -198,7 +203,7 @@ export default {
       handler (search) {
         if (search.length > 2) {
           this.items = this.items.filter((item) => {
-            return item.station.name.toLowerCase().includes(search.toLowerCase())
+            return item.details.toLowerCase().includes(search.toLowerCase())
           })
         } else {
           this.items = this.coreItems
