@@ -246,7 +246,7 @@
                 </span>
                 <div class="dialog-item-category">
                   <h3>{{ dialogItem.category.name }}</h3>
-                  <img :src="dialogItem.category.image">
+                  <img :src="dialogItem.category.image" class="dialog-image">
                 </div>
               </div>
 
@@ -513,6 +513,11 @@ export default {
     max-height: 250px;
     display: flex;
     justify-content: center;
+}
+
+.dialog-image {
+  max-width:200px;
+  object-fit: cover;
 }
 
 .main-dialog {
