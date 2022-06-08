@@ -135,6 +135,7 @@ export default {
     this.json_fields = {
       [this.$t('id')]: 'id',
       [this.$t('date')]: 'date',
+      [this.$t('details')]: 'details',
       [this.$t('category')]: 'category.name',
       [this.$t('stationName')]: 'station.name',
       [this.$t('stationNumber')]: 'station.number',
@@ -152,6 +153,7 @@ export default {
       return {
         id: item.id,
         date: item.date,
+        details: item.details,
         category: {
           name: item.category.name
         },
