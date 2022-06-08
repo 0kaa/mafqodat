@@ -152,6 +152,10 @@ export default {
   dateOfHiring: 'Date of hiring',
   name: 'Name',
   jobNumber: 'Job number',
+  pleaseFillInformerName: 'Please fill informer name',
+  pleaseFillInformerPhone: 'Please fill informer phone',
+  pleaseFillFullName: 'Please fill full name',
+  pleaseFillPhone: 'Please fill phone',
   // menu
   menu: {
     home: 'Home',

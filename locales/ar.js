@@ -152,6 +152,10 @@ export default {
   dateOfHiring: 'تاريخ التعيين',
   name: 'الاسم',
   jobNumber: 'الرقم الوظيفي',
+  pleaseFillInformerName: 'يرجى ملء اسم المبلغ',
+  pleaseFillInformerPhone: 'يرجى ملء رقم المبلغ',
+  pleaseFillFullName: 'يرجى ملء الاسم الكامل',
+  pleaseFillPhone: 'يرجى ملء رقم الهاتف',
   // menu
   menu: {
     home: 'الرئيسية',

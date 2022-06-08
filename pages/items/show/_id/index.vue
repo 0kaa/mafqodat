@@ -129,7 +129,7 @@
                     <v-row>
                       <v-col lg="6" cols="12" class="py-0">
                         <v-text-field
-                          v-model="item.recieve_name"
+                          v-model="item.full_name"
                           :label="$t('recieveName')"
                           outlined
                           required

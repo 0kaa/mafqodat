@@ -159,6 +159,7 @@
                 <v-col v-if="$route.query.type === 'enquery'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.informer_name"
+                    :rules="rules().informer_name"
                     :label="$t('informerName')"
                     outlined
                     color="black"
@@ -168,6 +169,7 @@
                 <v-col v-if="$route.query.type === 'enquery'" lg="6" cols="12" class="py-0">
                   <v-text-field
                     v-model="item.informer_phone"
+                    :rules="rules().informer_phone"
                     :label="$t('mobile')"
                     outlined
                     color="black"
@@ -497,6 +499,12 @@ export default {
         ],
         details: [
           v => !!v || this.$t('pleaseFillDetails')
+        ],
+        informer_name: [
+          v => !!v || this.$t('pleaseFillInformerName')
+        ],
+        informer_phone: [
+          v => !!v || this.$t('pleaseFillInformerPhone')
         ]
       }
     }
@@ -516,7 +524,7 @@ export default {
 }
 
 .dialog-image {
-  max-width:200px;
+  max-width:50px;
   object-fit: cover;
 }
 
