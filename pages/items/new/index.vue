@@ -77,6 +77,7 @@
                     :items="storages"
                     outlined
                     :disabled="!item.category_id"
+                    :rules="rules().storage_id"
                     :label="$t('chooseStorage')"
                     item-text="name"
                     item-value="id"
@@ -484,6 +485,9 @@ export default {
       return {
         itemCategory: [
           v => !!v || this.$t('pleaseSelectCategory')
+        ],
+        storage_id: [
+          v => !!v || this.$t('pleaseSelectStorage')
         ],
         stationType: [
           v => !!v || this.$t('pleaseSelectStationType')

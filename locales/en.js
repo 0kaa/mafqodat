@@ -156,6 +156,7 @@ export default {
   pleaseFillInformerPhone: 'Please fill informer phone',
   pleaseFillFullName: 'Please fill full name',
   pleaseFillPhone: 'Please fill phone',
+  pleaseSelectStorage: 'Please select storage',
   // menu
   menu: {
     home: 'Home',

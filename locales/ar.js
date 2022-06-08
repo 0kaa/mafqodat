@@ -156,6 +156,7 @@ export default {
   pleaseFillInformerPhone: 'يرجى ملء رقم المبلغ',
   pleaseFillFullName: 'يرجى ملء الاسم الكامل',
   pleaseFillPhone: 'يرجى ملء رقم الهاتف',
+  pleaseSelectStorage: 'يرجى اختيار مكان التخزين',
   // menu
   menu: {
     home: 'الرئيسية',
