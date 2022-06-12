@@ -77,7 +77,7 @@ export default {
   countryRequired: 'Country is required',
   cityRequired: 'City is required',
   permissions: 'Permissions',
-  logs: 'Logs',
+  logs: 'Records',
   loadMore: 'Load more',
   addNewItem: 'Add new item',
   itemType: 'Item type',
@@ -161,6 +161,8 @@ export default {
   event: 'Event',
   time: 'Time',
   theDate: 'Date',
+  didYouWantToRemove: 'Did you want to remove?',
+  remove: 'Remove',
   // menu
   menu: {
     home: 'Home',

@@ -60,7 +60,7 @@
             <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('update_item')" :to="localePath(`/items/edit/${item.id}`)" class="primary--text" elevation="0" small>
               {{ $t('edit') }}
             </v-btn>
-            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('delete_item')" class="error--text" elevation="0" small @click="deleteItem(item.id)">
+            <v-btn v-if="$auth.loggedIn && $auth.user.permissions.includes('delete_item')" class="error--text" elevation="0" small @click="chooseId(item.id)">
               {{ $t('delete') }}
             </v-btn>
           </div>
@@ -94,6 +94,34 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="text-center">
+          {{ $t('didYouWantToRemove') }}
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="gray"
+            text
+            @click="dialog = false"
+          >
+            {{ $t('cancel') }}
+          </v-btn>
+          <v-btn
+            color="error"
+            text
+            @click="deleteItem"
+          >
+            {{ $t('remove') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -101,6 +129,7 @@
 export default {
   name: 'ItemsArchive',
   data: () => ({
+    dialog: false,
     filterData: {},
     filterOpen: false,
     search: '',
@@ -125,7 +154,8 @@ export default {
           value: 'utf-8'
         }
       ]
-    ]
+    ],
+    deleteId: 0
   }),
   async fetch () {
     await this.getAllItems(this.page)
@@ -238,17 +268,25 @@ export default {
         this.filterOpen = false
       }
     },
-    async deleteItem (id) {
+    chooseId (id) {
+      this.deleteId = id
+      this.dialog = true
+    },
+    async deleteItem () {
       try {
-        const response = await this.$api.items.delete(id)
+        const response = await this.$api.items.delete(this.deleteId)
+        this.dialog = false
         this.snackbar = true
         this.snackbarText = response.data.message
         this.snackbarColor = 'green'
+        this.deleteId = 0
         this.$fetch()
       } catch (e) {
+        this.dialog = false
         this.snackbar = true
         this.snackbarText = e.response.data.message
         this.snackbarColor = 'red'
+        this.deleteId = 0
       }
     },
     async getAllItems (page) {

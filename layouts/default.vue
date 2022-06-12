@@ -91,13 +91,12 @@
                 alt="user profile"
                 class="user-profile-default"
               />
-              <v-img
+              <v-icon
                 v-else
-                class="d-flex align-center text-center"
-                max-width="45"
-                max-height="45"
-                src="/arab.png"
-              />
+                size="30"
+              >
+                mdi-account-tie
+              </v-icon>
             </v-btn>
           </template>
 
@@ -216,12 +215,12 @@ export default {
           to: this.localePath('/items'),
           new: false
         },
-        // {
-        //   icon: 'mdi-note-text',
-        //   title: this.$t('logs'),
-        //   to: this.localePath('/logs'),
-        //   new: false
-        // }
+        {
+          icon: 'mdi-note-text',
+          title: this.$t('logs'),
+          to: this.localePath('/logs'),
+          new: false
+        },
         {
           icon: 'mdi-cog',
           title: this.$t('menu.settings'),
@@ -255,7 +254,7 @@ export default {
 }
 .logo {
   width:100%;
-  max-width:150px;
+  max-width:200px;
   object-fit: cover;
 }
 .saudi-vision {

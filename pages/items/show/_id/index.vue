@@ -310,7 +310,7 @@ export default {
       }).then((canvas) => {
         const myImage = canvas.toDataURL('image/jpeg,1.0')
         const imgWidth = 200
-        const imgHeight = 200
+        const imgHeight = 320
         // eslint-disable-next-line new-cap
         const pdf = new jsPDF('p', 'mm', 'a4')
         pdf.addImage(myImage, 'png', 2, 2, imgWidth, imgHeight)
