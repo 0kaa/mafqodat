@@ -328,8 +328,6 @@ export default {
       category_id: '',
       station_id: '',
       storage_id: '',
-      type: '',
-      cost: '',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       time: '',
       details: '',
