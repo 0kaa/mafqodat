@@ -233,6 +233,13 @@ export default {
   created () {
     this.$vuetify.rtl = this.$i18n.locale === 'ar'
   },
+  mounted () {
+    setTimeout(() => {
+      if (this.$vuetify.breakpoint.mobile) {
+        this.drawer = false
+      }
+    }, 0)
+  },
   methods: {
     async logout () {
       await this.$auth.logout()
@@ -256,11 +263,17 @@ export default {
   width:100%;
   max-width:200px;
   object-fit: cover;
+  @media(max-width:768px) {
+    max-width:150px;
+  }
 }
 .saudi-vision {
   width:100%;
   max-width:65px;
   object-fit: cover;
+    @media(max-width:768px) {
+    max-width:50px;
+  }
 }
 .user-profile-default {
   max-width: 50px;
