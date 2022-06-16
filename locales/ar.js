@@ -163,6 +163,8 @@ export default {
   theDate: 'التاريخ',
   didYouWantToRemove: 'هل تريد حذف ؟',
   remove: 'حذف',
+  itemNumber: 'رقم البلاغ',
+  pleaseFillDeliveryDate: 'يرجى ملء تاريخ التسليم',
   // menu
   menu: {
     home: 'الرئيسية',

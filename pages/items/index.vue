@@ -71,6 +71,12 @@
         <template #[`item.phone`]="{ item }">
           {{ item.phone ? item.phone : '-' }}
         </template>
+        <template #[`item.storage.name`]="{ item }">
+          {{ item.storage !== null ? item.storage.name : '-' }}
+        </template>
+        <template #[`item.delivery_date`]="{ item }">
+          {{ item.delivery_date ? item.delivery_date : '-' }}
+        </template>
       </v-data-table>
       <div class="text-center pt-8">
         <v-pagination
@@ -193,7 +199,7 @@ export default {
           location: item.station.location
         },
         storage: {
-          name: item.storage.name
+          name: item.storage ? item.storage.name : '-'
         },
         item_status: item.item_status,
         full_name: item.full_name ? item.full_name : '-',
@@ -251,6 +257,7 @@ export default {
   },
 
   methods: {
+
     filterTable (value) {
       if (value) {
         this.filterData = value

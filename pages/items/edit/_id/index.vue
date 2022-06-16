@@ -69,7 +69,7 @@
                     </v-date-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6" cols="12" class="py-0">
+                <v-col v-if="item.report_type !== 'found'" lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.storage"
                     :items="storages"
@@ -209,6 +209,49 @@
                           background-color="white"
                         />
                       </v-col>
+                      <v-col lg="6" cols="12" class="py-0">
+                        <v-dialog
+                          ref="dialog"
+                          v-model="modalDelievryDate"
+                          :return-value.sync="item.delivery_date"
+                          persistent
+                          width="290px"
+                        >
+                          <template #activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="item.delivery_date"
+                              :label="$t('deliveryDate')"
+                              readonly
+                              outlined
+                              color="black"
+                              background-color="white"
+                              :rules="rules().itemDeliveryDate"
+                              v-bind="attrs"
+                              v-on="on"
+                            />
+                          </template>
+                          <v-date-picker
+                            v-model="item.delivery_date"
+                            scrollable
+                          >
+                            <v-spacer />
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="modalDelievryDate = false"
+                            >
+                              {{ $t('cancel') }}
+                            </v-btn>
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="$refs.dialog.save(item.delivery_date)"
+                            >
+                              {{ $t('ok') }}
+                            </v-btn>
+                          </v-date-picker>
+                        </v-dialog>
+                      </v-col>
                     </v-row>
                   </div>
                 </v-col>
@@ -320,6 +363,7 @@ export default {
   data: () => ({
     menu: false,
     modalDate: false,
+    modalDelievryDate: false,
     modalTime: false,
     imgPreview: '',
     valid: true,
@@ -335,6 +379,7 @@ export default {
       informer_phone: '',
       report_type: '',
       full_name: '',
+      delivery_date: '',
       is_delivered: 0,
       user: ''
     },
@@ -403,7 +448,7 @@ export default {
         try {
           const formData = new FormData()
           for (const key in this.item) {
-            if (key === 'category' || key === 'station' || key === 'storage') {
+            if ((key === 'category' || key === 'station') || (key === 'storage' && this.item.report_type === 'lost')) {
               formData.append(key + '_id', this.item[key].id)
             } else if (key !== 'images') { formData.append(key, this.item[key]) }
           }
@@ -467,6 +512,9 @@ export default {
         ],
         phone: [
           v => !!v || this.$t('pleaseFillPhone')
+        ],
+        itemDeliveryDate: [
+          v => !!v || this.$t('pleaseFillDeliveryDate')
         ]
       }
     }

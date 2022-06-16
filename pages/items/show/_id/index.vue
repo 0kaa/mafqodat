@@ -31,7 +31,7 @@
                     background-color="white"
                   />
                 </v-col>
-                <v-col lg="6" cols="12" class="py-0">
+                <v-col v-if="item.report_type !== 'found'" lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.storage"
                     :items="storages"
@@ -151,6 +151,18 @@
                           background-color="white"
                         />
                       </v-col>
+                      <v-col lg="6" cols="12" class="py-0">
+                        <v-text-field
+                          v-model="item.delivery_date"
+                          :label="$t('deliveryDate')"
+                          type="text"
+                          readonly
+                          outlined
+                          required
+                          color="black"
+                          background-color="white"
+                        />
+                      </v-col>
                     </v-row>
                   </div>
                 </v-col>
@@ -177,10 +189,30 @@
             <canvas id="canvas" ref="canvas" class="canvas" />
           </div>
 
+          <client-only>
+            <vue-html2pdf
+              ref="html2Pdf"
+              :show-layout="false"
+              :float-layout="true"
+              :enable-download="true"
+              :preview-modal="true"
+              :filename="'qrcode'"
+              :paginate-elements-by-height="1100"
+              :pdf-quality="2"
+              :pdf-format="'a4'"
+              :pdf-orientation="'portrait'"
+              :pdf-content-width="'800px'"
+              :manual-pagination="false"
+              :html-to-pdf-options="htmlToPdfOptions"
+            >
+              <pdf-content slot="pdf-content" :item="item" />
+            </vue-html2pdf>
+          </client-only>
+
           <v-btn
             class="v-btn--active"
             text
-            @click="print()"
+            @click="downloadPdf()"
           >
             {{ $t('print') }}
           </v-btn>
@@ -275,6 +307,26 @@ export default {
     }
   },
   computed: {
+    htmlToPdfOptions () {
+      return {
+        margin: 0,
+        filename: 'qrcode.pdf',
+        image: {
+          type: 'jpeg',
+          quality: 0.98
+        },
+        enableLinks: true,
+        html2canvas: {
+          scale: 2,
+          useCORS: true
+        },
+        jsPDF: {
+          unit: 'in',
+          format: 'a4',
+          orientation: 'portrait'
+        }
+      }
+    },
     storages () {
       return [this.item.category ? this.item.category.storage : {}]
     },
@@ -302,6 +354,9 @@ export default {
     }, 100)
   },
   methods: {
+    downloadPdf () {
+      this.$refs.html2Pdf.generatePdf()
+    },
     print () {
       const data = this.$refs.print
       html2canvas(data, {

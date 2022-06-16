@@ -71,7 +71,7 @@
                     </v-date-picker>
                   </v-dialog>
                 </v-col>
-                <v-col lg="6" cols="12" class="py-0">
+                <v-col v-if="$route.query.type !== 'enquery'" lg="6" cols="12" class="py-0">
                   <v-select
                     v-model="item.storage_id"
                     :items="storages"
@@ -268,7 +268,7 @@ export default {
     item: {
       category_id: '',
       station_id: '',
-      storage_id: '',
+      // storage_id: '',
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       time: '',
       details: '',

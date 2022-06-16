@@ -41,7 +41,9 @@ export default {
     { src: '~/plugins/axios.js' },
     { src: '~/plugins/i18n.js' },
     { src: '~/plugins/google-maps.js', client: true },
-    { src: '~/plugins/vue-json-excel.js' }
+    { src: '~/plugins/vue-json-excel.js' },
+    { src: '@/plugins/vue-html2pdf', mode: 'client' }
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

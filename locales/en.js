@@ -163,6 +163,8 @@ export default {
   theDate: 'Date',
   didYouWantToRemove: 'Did you want to remove?',
   remove: 'Remove',
+  itemNumber: 'Item number',
+  pleaseFillDeliveryDate: 'Please fill delivery date',
   // menu
   menu: {
     home: 'Home',
