@@ -163,7 +163,7 @@
       <v-container fluid class="pt-8 px-8">
         <Nuxt
           keep-alive
-          :keep-alive-props="{ exclude: ['Reports','EditItem','ShowItem','Logs'] }"
+          :keep-alive-props="{ exclude: ['Reports','EditItem','ShowItem','Logs','NewItem'] }"
         />
       </v-container>
     </v-main>

@@ -231,6 +231,26 @@
           />
         </div>
       </v-col>
+      <client-only>
+        <vue-html2pdf
+          v-if="$route.query.type !== 'enquery' && showPrint"
+          ref="html2Pdf"
+          :show-layout="false"
+          :float-layout="true"
+          :enable-download="true"
+          :preview-modal="true"
+          :filename="'qrcode'"
+          :paginate-elements-by-height="1100"
+          :pdf-quality="2"
+          :pdf-format="'a4'"
+          :pdf-orientation="'portrait'"
+          :pdf-content-width="'800px'"
+          :manual-pagination="false"
+          :html-to-pdf-options="htmlToPdfOptions"
+        >
+          <pdf-content slot="pdf-content" :item="printedItem" />
+        </vue-html2pdf>
+      </client-only>
     </v-row>
     <v-snackbar v-model="snackbar" :timeout="8000" :color="snackbarColor">
       {{ snackbarText }}
@@ -250,6 +270,7 @@
 
 <script>
 export default {
+  name: 'NewItem',
   async asyncData ({ $api }) {
     const categories = await $api.categories.all()
     const stations = await $api.stations.all()
@@ -260,6 +281,8 @@ export default {
   },
   data: () => ({
     url: '',
+    printedItem: {},
+    showPrint: false,
     dialog: false,
     modalDate: false,
     modalTime: false,
@@ -283,8 +306,50 @@ export default {
     snackbarColor: 'red',
     loading: false
   }),
+  head () {
+    return {
+      script: [
+        {
+          hid: 'QRCode',
+          src:
+            'https://jojotoo-static.oss-cn-shanghai.aliyuncs.com/resources/script/qrcode.min.js',
+          defer: true,
+          callback: () => {
+            this.QRCodeModuleLoaded = true
+          }
+        },
+        {
+          hid: 'jsPDF',
+          src:
+            'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+          defer: true
+        }
+
+      ]
+    }
+  },
 
   computed: {
+    htmlToPdfOptions () {
+      return {
+        margin: 0,
+        filename: 'qrcode.pdf',
+        image: {
+          type: 'jpeg',
+          quality: 0.98
+        },
+        enableLinks: true,
+        html2canvas: {
+          scale: 2,
+          useCORS: true
+        },
+        jsPDF: {
+          unit: 'in',
+          format: 'a4',
+          orientation: 'portrait'
+        }
+      }
+    },
     storages () {
       return [this.item.category_id ? this.item.category_id.storage : {}]
     },
@@ -341,10 +406,20 @@ export default {
               formData.append('images[]', image)
             })
           }
+
           this.$api.items.create(formData).then((response) => {
-            this.snackbar = true
-            this.snackbarText = response.data.message
-            this.snackbarColor = 'green'
+            if (this.$route.query.type !== 'enquery') {
+              this.showPrint = true
+              this.printedItem = response.data.data
+              setTimeout(() => {
+                this.$refs.html2Pdf.generatePdf()
+                this.showPrint = false
+              }, 200)
+            } else {
+              this.snackbar = true
+              this.snackbarText = response.data.message
+              this.snackbarColor = 'green'
+            }
             this.loading = false
             this.$refs.form.reset()
             this.item.images = []
