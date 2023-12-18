@@ -32,8 +32,8 @@ export default {
     url: ''
   }),
   mounted () {
-    const domain = window.location.protocol + '//' + window.location.host
-    this.url = domain + '/items/show/' + this.item.id
+    // const domain = window.location.protocol + '//' + window.location.host
+    this.url = 'https://admin.lostzom.com/item/' + this.item.id
     setTimeout(() => {
       this.getQRCode()
     }, 100)

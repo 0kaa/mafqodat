@@ -106,7 +106,9 @@ export default {
   },
   methods: {
     onClickRow (v) {
-      this.$router.push(`/items/show/${v.item_id}`)
+      // console.log('log v' + v.item_id)
+      // this.$router.push(`/items/show/${v.item_id}`)
+      this.$router.push(this.localePath(`/items/show/${v.item_id}`))
     },
     async getMoreLogs (page) {
       this.loading = true
