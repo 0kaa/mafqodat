@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - mafqodat',
-    title: 'mafqodat',
+    titleTemplate: '%s - Lostzom',
+    title: 'Lostzom',
     htmlAttrs: {
       lang: 'en'
     },
@@ -88,7 +88,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://mafqudat.jadara.work/api/'
+    baseURL: 'https://admin.lostzom.com/api/'
     // baseURL: 'http://127.0.0.1:8000/api/'
   },
   auth: {

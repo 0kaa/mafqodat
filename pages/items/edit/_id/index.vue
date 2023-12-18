@@ -117,7 +117,7 @@
                   </v-dialog>
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
-                  <v-select
+                  <!-- <v-select
                     v-model="item.station"
                     :items="stations"
                     outlined
@@ -128,7 +128,19 @@
                     background-color="white"
                     :menu-props="{ bottom: true, offsetY: true }"
                     :rules="rules().stationType"
-                  />
+                  /> -->
+                  <v-autocomplete
+                    v-model="item.station"
+                    :items="stations"
+                    outlined
+                    :label="$t('chooseStation')"
+                    item-text="name"
+                    item-value="value"
+                    return-object
+                    background-color="white"
+                    :menu-props="{ bottom: true, offsetY: true }"
+                    :rules="rules().stationType"
+                  ></v-autocomplete>
                 </v-col>
                 <v-col lg="6" cols="12" class="py-0">
                   <v-textarea
